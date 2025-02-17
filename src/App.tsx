@@ -1,61 +1,55 @@
-import logoMobile from './assets/svgs/logo-mobile.svg';
-import chevronDown from './assets/svgs/icon-chevron-down.svg';
-import addTask from './assets/svgs/icon-add-task-mobile.svg';
-import ellipsis from './assets/svgs/icon-vertical-ellipsis.svg';
-import logoDark from './assets/svgs/logo-dark.svg';
-import logoLight from './assets/svgs/logo-light.svg';
-import { useThemeContext } from './hooks/useThemeContext';
-import { THEMES } from './utils/theme';
+import BoardList from './components/BoardList';
+import Header from './components/Header';
+import { BOARD_STATUS } from './utils/boardStatus';
 
 function App() {
-    const { theme, toggleTheme } = useThemeContext();
-
-    const isDark = theme === THEMES.DARK;
-
     return (
-        <div>
-            <header className="flex items-center bg-white dark:bg-dark-gray justify-between gap-2 shadow-sm border-b border-dark-white dark:border-light-gray theme-transition">
-                <div className="flex items-center">
-                    <div className="p-5 sm:p-7 md:p-8 sm:border-r-1 sm:border-dark-white dark:sm:border-light-gray theme-transition">
-                        <img src={logoMobile} alt="" className="sm:hidden" />
-                        <img
-                            src={isDark ? logoLight : logoDark}
-                            alt=""
-                            className="hidden sm:block"
-                        />
-                    </div>
-                    <div className="py-5 sm:p-7 md:p-8">
-                        <button className="flex items-center gap-2 cursor-pointer sm:hidden">
-                            <span className="xs:text-lg font-bold text-dark-black dark:text-white">
-                                Platform Launch{' '}
-                            </span>
-                            <img src={chevronDown} alt="" className="mt-1 hidden xs:block" />
-                        </button>
-                        <span className="text-xl md:text-2xl hidden sm:inline font-bold text-dark-black dark:text-white">
-                            Platform Launch{' '}
-                        </span>
-                    </div>
-                </div>
+        <div className="relative">
+            <Header />
 
-                <div className="flex items-center gap-4 cursor-pointer p-5 sm:gap-6">
-                    <button
-                        onClick={toggleTheme}
-                        className="flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6"
-                    >
-                        <img src={addTask} alt="" />
-                        <span className="text-white font-semibold hidden sm:inline">
-                            Add New Task
-                        </span>
-                    </button>
-                    <button className="cursor-pointer h-4 sm:h-5 shrink-0">
-                        <img
-                            src={ellipsis}
-                            alt=""
-                            className="object-cover object-center h-full w-full"
+            <nav className="z-10 absolute inset-0 top-17 bg-black/50 pt-8">
+                <div className="bg-white dark:bg-dark-gray rounded-lg theme-transition mx-auto py-4 w-66">
+                    <span className="px-6 block font-bold uppercase tracking-[0.2em] text-sm mb-5">
+                        All boards (3)
+                    </span>
+
+                    <div>
+                        <ul>
+                            <BoardList
+                                status={BOARD_STATUS.CURRENT}
+                                content="Platform Launch"
+                            />
+                            <BoardList
+                                status={BOARD_STATUS.INACTIVE}
+                                content="Marketing Plan"
+                            />
+                            <BoardList
+                                status={BOARD_STATUS.INACTIVE}
+                                content="Roadmap"
+                            />
+                        </ul>
+                        <BoardList
+                            status={BOARD_STATUS.CREATE}
+                            isButton={true}
                         />
-                    </button>
+                    </div>
+
+                    <div className="mx-3 rounded-sm bg-dark-white py-3 flex items-center justify-center gap-3">
+                        <label className="inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                value=""
+                                className="sr-only peer"
+                            />
+                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                Toggle me
+                            </span>
+                        </label>
+                    </div>
                 </div>
-            </header>
+            </nav>
+
             <main className="overflow-x-auto min-h-screen">
                 <div className="w-400 h-full">
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit.
