@@ -4,6 +4,7 @@
 
 @theme {
   --font-sans: "Plus Jakarta Sans", "sans-serif";
+  --breakpoint-xs: 360px;
   --breakpoint-sm: 768px;
   --breakpoint-md: 1440px;
 
@@ -24,6 +25,14 @@
 
   --color-dark-red: oklch(64.91% 0.1847 23.81);
   --color-light-red: oklch(78.66% 0.1239 20.23);
+}
+
+.btn-primary {
+  @apply bg-dark-violet cursor-pointer rounded-full transition-colors duration-300 ease-in-out hover:bg-light-violet;
+}
+
+.theme-transition {
+  @apply transition-colors duration-500 ease-in-out;
 }
 
 @font-face {
