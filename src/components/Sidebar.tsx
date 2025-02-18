@@ -6,13 +6,14 @@ import moon from '../assets/svgs/icon-dark-theme.svg';
 import { THEMES } from '../utils/theme';
 import logoDark from '../assets/svgs/logo-dark.svg';
 import logoLight from '../assets/svgs/logo-light.svg';
+import hideSidebarIcon from '../assets/svgs/icon-hide-sidebar.svg';
 import { AnimateWrapper } from '../providers/AnimateWrapper';
 import { useRef, useState } from 'react';
 import useEventListener from '../hooks/useEventListener';
 
 type SidebarProps = {
-    showSidebar: boolean,
-    hideSidebar: () => void,
+    showSidebar: boolean;
+    hideSidebar: () => void;
 };
 
 export default function Sidebar({ showSidebar, hideSidebar }: SidebarProps) {
@@ -94,7 +95,13 @@ export default function Sidebar({ showSidebar, hideSidebar }: SidebarProps) {
                         <img src={moon} alt="Moon icon" className="w-4 h-4" />
                     </div>
 
-                    <button onClick={hideSidebar}>hide sidebar</button>
+                    <button
+                        onClick={hideSidebar}
+                        className="flex cursor-pointer items-center font-semibold pl-6 py-4 mt-8 mr-6 w-11/12 gap-4 tracking-wide rounded-r-full capitalize transition-colors duration-300 ease-in-out hover:bg-dark-white dark:hover:bg-dark-white"
+                    >
+                        <img src={hideSidebarIcon} alt="" className="w-5 h-5" />
+                        <span>hide sidebar</span>
+                    </button>
                 </div>
             </nav>
         </AnimateWrapper>
