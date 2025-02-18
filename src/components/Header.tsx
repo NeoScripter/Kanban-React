@@ -7,8 +7,12 @@ import logoLight from '../assets/svgs/logo-light.svg';
 import { useThemeContext } from '../hooks/useThemeContext';
 import { THEMES } from '../utils/theme';
 
-export default function Header() {
-    const { theme, toggleTheme } = useThemeContext();
+type HeaderProps = {
+    toggleNavBar: () => void,
+}
+
+export default function Header({ toggleNavBar }: HeaderProps) {
+    const { theme } = useThemeContext();
 
     const isDark = theme === THEMES.DARK;
 
@@ -24,7 +28,7 @@ export default function Header() {
                         />
                     </div>
                     <div className="py-5 sm:p-7 md:p-8">
-                        <button className="flex items-center gap-2 cursor-pointer sm:hidden">
+                        <button onClick={toggleNavBar} className="flex items-center gap-2 cursor-pointer sm:hidden">
                             <span className="xs:text-lg font-bold text-dark-black dark:text-white">
                                 Platform Launch{' '}
                             </span>
@@ -38,7 +42,7 @@ export default function Header() {
 
                 <div className="flex items-center gap-4 cursor-pointer p-5 sm:gap-6">
                     <button
-                        onClick={toggleTheme}
+                    onClick={toggleNavBar}
                         className="flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6"
                     >
                         <img src={addTask} alt="" />
