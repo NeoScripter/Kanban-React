@@ -10,11 +10,12 @@ import { AnimateWrapper } from '../providers/AnimateWrapper';
 import { useRef, useState } from 'react';
 import useEventListener from '../hooks/useEventListener';
 
-type NavBarProps = {
-    showNavBar: boolean;
+type SidebarProps = {
+    showSidebar: boolean,
+    hideSidebar: () => void,
 };
 
-export default function NavBar({ showNavBar }: NavBarProps) {
+export default function Sidebar({ showSidebar, hideSidebar }: SidebarProps) {
     const { theme, toggleTheme } = useThemeContext();
     const [isLarge, setIsLarge] = useState(() => window.innerWidth > 768);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -42,8 +43,8 @@ export default function NavBar({ showNavBar }: NavBarProps) {
     };
 
     return (
-        <AnimateWrapper isVisible={showNavBar} options={options}>
-            <nav className="z-10 absolute min-h-screen inset-0 top-17 bg-black/50 pt-8 sm:top-0 sm:fixed sm:w-65 sm:pt-0">
+        <AnimateWrapper isVisible={showSidebar} options={options}>
+            <nav className="z-10 absolute min-h-screen inset-0 top-17 bg-black/50 pt-8 sm:top-0 sm:fixed sm:w-65 sm:pt-0 sm:border-r sm:border-dark-white dark:border-light-gray theme-transition">
                 <div className="bg-white dark:bg-dark-gray rounded-lg sm:rounded-none theme-transition mx-auto py-4 w-66 sm:w-full sm:h-full">
                     <div className="py-4 px-6 hidden sm:block mb-6">
                         <img
@@ -92,6 +93,8 @@ export default function NavBar({ showNavBar }: NavBarProps) {
 
                         <img src={moon} alt="Moon icon" className="w-4 h-4" />
                     </div>
+
+                    <button onClick={hideSidebar}>hide sidebar</button>
                 </div>
             </nav>
         </AnimateWrapper>

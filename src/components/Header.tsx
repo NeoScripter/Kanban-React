@@ -6,12 +6,14 @@ import logoDark from '../assets/svgs/logo-dark.svg';
 import logoLight from '../assets/svgs/logo-light.svg';
 import { useThemeContext } from '../hooks/useThemeContext';
 import { THEMES } from '../utils/theme';
+import { cc } from '../utils/cc';
 
 type HeaderProps = {
-    toggleNavBar: () => void,
+    toggleSidebar: () => void,
+    showSidebar: boolean,
 }
 
-export default function Header({ toggleNavBar }: HeaderProps) {
+export default function Header({ toggleSidebar, showSidebar }: HeaderProps) {
     const { theme } = useThemeContext();
 
     const isDark = theme === THEMES.DARK;
@@ -28,13 +30,13 @@ export default function Header({ toggleNavBar }: HeaderProps) {
                         />
                     </div>
                     <div className="py-5 sm:p-7 md:p-8">
-                        <button onClick={toggleNavBar} className="flex items-center gap-2 cursor-pointer sm:hidden">
+                        <button onClick={toggleSidebar} className="flex items-center gap-2 cursor-pointer sm:hidden">
                             <span className="xs:text-lg font-bold text-dark-black dark:text-white">
                                 Platform Launch{' '}
                             </span>
                             <img src={chevronDown} alt="" className="mt-1 hidden xs:block" />
                         </button>
-                        <span className="text-xl md:text-2xl hidden sm:inline font-bold text-dark-black dark:text-white">
+                        <span className={cc('text-xl md:text-2xl hidden sm:block transition-transform duration-400 font-bold text-dark-black dark:text-white', showSidebar && 'translate-x-[3rem]')}>
                             Platform Launch{' '}
                         </span>
                     </div>
@@ -42,7 +44,6 @@ export default function Header({ toggleNavBar }: HeaderProps) {
 
                 <div className="flex items-center gap-4 cursor-pointer p-5 sm:gap-6">
                     <button
-                    onClick={toggleNavBar}
                         className="flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6"
                     >
                         <img src={addTask} alt="" />

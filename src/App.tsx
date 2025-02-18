@@ -1,18 +1,29 @@
 import { useState } from 'react';
 import Header from './components/Header';
-import NavBar from './components/NavBar';
+import Sidebar from './components/Sidebar';
+import ShowSidebarButton from './components/ShowSidebarButton';
+import { AnimateWrapper } from './providers/AnimateWrapper';
 
 function App() {
-    const [showNavBar, setShowNavBar] = useState(false);
+    const [showSidebar, setShowSidebar] = useState(false);
 
-    function toggleNavBar() {
-        setShowNavBar(o => !o);
+    function toggleSidebar() {
+        setShowSidebar((o) => !o);
     }
+
+    function hideSidebar() {
+        setShowSidebar(false);
+    }
+    
     return (
         <div className="relative">
-            <Header toggleNavBar={toggleNavBar} />
+            <Header toggleSidebar={toggleSidebar} showSidebar={showSidebar} />
 
-            <NavBar showNavBar={showNavBar} />
+            <Sidebar showSidebar={showSidebar} hideSidebar={hideSidebar} />
+
+            <AnimateWrapper isVisible={!showSidebar}>
+                <ShowSidebarButton toggleSidebar={toggleSidebar} />
+            </AnimateWrapper>
 
             <main className="overflow-x-auto min-h-screen">
                 <div className="w-400 h-full">
