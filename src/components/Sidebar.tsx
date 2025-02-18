@@ -45,7 +45,7 @@ export default function Sidebar({ showSidebar, hideSidebar }: SidebarProps) {
 
     return (
         <AnimateWrapper isVisible={showSidebar} options={options}>
-            <nav className="z-10 absolute min-h-screen inset-0 top-17 bg-black/50 pt-8 sm:top-0 sm:fixed sm:w-65 sm:pt-0 sm:border-r sm:border-dark-white dark:border-light-gray theme-transition">
+            <nav className="z-10 absolute min-h-screen inset-0 top-17 bg-black/50 pt-8 sm:top-0 sm:fixed sm:w-65 md:w-75 sm:pt-0 sm:border-r sm:border-dark-white dark:border-light-gray theme-transition">
                 <div className="bg-white dark:bg-dark-gray rounded-lg sm:rounded-none theme-transition mx-auto py-4 w-66 sm:w-full sm:h-full">
                     <div className="py-4 px-6 hidden sm:block mb-6">
                         <img
@@ -79,7 +79,7 @@ export default function Sidebar({ showSidebar, hideSidebar }: SidebarProps) {
                         />
                     </div>
 
-                    <div className="mx-3 mt-3 sm:mt-20 rounded-sm bg-dark-white dark:bg-light-black theme-transition py-3 flex items-center justify-center gap-6">
+                    <div className="mx-3 mt-3 sm:mt-20 md:mt-30 rounded-sm bg-dark-white dark:bg-light-black theme-transition py-3 flex items-center justify-center gap-6">
                         <img src={sun} alt="Sun icon" className="w-4 h-4" />
 
                         <label className="inline-flex items-center cursor-pointer">
