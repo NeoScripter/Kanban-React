@@ -2,7 +2,7 @@ import currentBoard from '../assets/svgs/current-board.svg';
 import inactiveBoard from '../assets/svgs/board.svg';
 import createBoard from '../assets/svgs/create-board.svg';
 
-import { BOARD_STATUS } from '../utils/boardStatus';
+import { BOARD_STATUS } from '../consts/boardStatus';
 import { cc } from '../utils/cc';
 
 type BoardListProps = {

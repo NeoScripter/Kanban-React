@@ -1,5 +1,5 @@
 import { useThemeContext } from '../hooks/useThemeContext';
-import { BOARD_STATUS } from '../utils/boardStatus';
+import { BOARD_STATUS } from '../consts/boardStatus';
 import BoardList from './BoardList';
 import sun from '../assets/svgs/icon-light-theme.svg';
 import moon from '../assets/svgs/icon-dark-theme.svg';
@@ -7,43 +7,22 @@ import { THEMES } from '../utils/theme';
 import logoDark from '../assets/svgs/logo-dark.svg';
 import logoLight from '../assets/svgs/logo-light.svg';
 import { AnimateWrapper } from '../providers/AnimateWrapper';
-import { useRef, useState } from 'react';
-import useEventListener from '../hooks/useEventListener';
+import { useScreenResize } from '../hooks/useScreenResize';
+import { getSidebarAnimationOptions } from '../consts/sidebarAnimationOptions';
+import { useSidebarContext } from '../hooks/useSidebarContext';
 
-type SidebarProps = {
-    showSidebar: boolean;
-    hideSidebar: () => void;
-};
-
-export default function Sidebar({ showSidebar, hideSidebar }: SidebarProps) {
+export default function Sidebar() {
     const { theme, toggleTheme } = useThemeContext();
-    const [isLarge, setIsLarge] = useState(() => window.innerWidth > 768);
-    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    useEventListener('resize', () => {
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-        timeoutRef.current = setTimeout(() => {
-            setIsLarge(window.innerWidth > 768);
-        }, 100);
-    });
+    const { showSidebar, hideSidebar } = useSidebarContext();
+    const isLarge = useScreenResize();
 
     const isDark = THEMES.DARK === theme;
 
-    const options = {
-        initial: isLarge
-            ? { x: -260, y: -100, transition: { duration: 0, ease: 'easeOut' } }
-            : { opacity: 0, y: 0 },
-        animate: isLarge
-            ? { x: 0, transition: { duration: 0.4, ease: 'easeOut' } }
-            : { opacity: 1, y: 0 },
-        exit: isLarge
-            ? { x: -260, transition: { duration: 0.4, ease: 'easeOut' } }
-            : { opacity: 0, y: 0 }
-    };
-
     return (
-        <AnimateWrapper isVisible={showSidebar} options={options}>
+        <AnimateWrapper
+            isVisible={showSidebar}
+            options={getSidebarAnimationOptions(isLarge)}
+        >
             <nav className="z-10 absolute min-h-screen inset-0 top-17 bg-black/50 pt-8 sm:top-0 sm:fixed sm:w-65 md:w-75 sm:pt-0 sm:border-r sm:border-dark-white dark:border-light-gray theme-transition">
                 <div className="bg-white dark:bg-dark-gray rounded-lg sm:rounded-none theme-transition mx-auto py-4 w-66 sm:w-full sm:h-full">
                     <div className="py-4 px-6 hidden sm:block mb-6">

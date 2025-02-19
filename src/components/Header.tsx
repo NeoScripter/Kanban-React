@@ -7,14 +7,12 @@ import logoLight from '../assets/svgs/logo-light.svg';
 import { useThemeContext } from '../hooks/useThemeContext';
 import { THEMES } from '../utils/theme';
 import { cc } from '../utils/cc';
+import { useSidebarContext } from '../hooks/useSidebarContext';
 
-type HeaderProps = {
-    toggleSidebar: () => void,
-    showSidebar: boolean,
-}
 
-export default function Header({ toggleSidebar, showSidebar }: HeaderProps) {
+export default function Header() {
     const { theme } = useThemeContext();
+    const { showSidebar, toggleSidebar } = useSidebarContext();
 
     const isDark = theme === THEMES.DARK;
 
