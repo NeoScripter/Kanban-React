@@ -10,11 +10,14 @@ import { AnimateWrapper } from '../providers/AnimateWrapper';
 import { useScreenResize } from '../hooks/useScreenResize';
 import { getSidebarAnimationOptions } from '../consts/sidebarAnimationOptions';
 import { useSidebarContext } from '../hooks/useSidebarContext';
+import { useBoardContext } from '../hooks/useBoardContext';
 
 export default function Sidebar() {
     const { theme, toggleTheme } = useThemeContext();
     const { showSidebar, hideSidebar } = useSidebarContext();
     const isLarge = useScreenResize();
+    const { displayBoardNames, currentBoardIndex, selectBoard, boardLength } =
+        useBoardContext();
 
     const isDark = THEMES.DARK === theme;
 
@@ -28,32 +31,33 @@ export default function Sidebar() {
                     <div className="py-4 px-6 hidden sm:block mb-6">
                         <img
                             src={isDark ? logoLight : logoDark}
-                            alt=""
-                            className=""
+                            alt="Kanban logo"
                         />
                     </div>
                     <span className="px-6 block font-bold uppercase tracking-[0.2em] text-sm mb-5">
-                        All boards (3)
+                        All boards ({boardLength})
                     </span>
 
                     <div>
                         <ul>
-                            <BoardList
-                                status={BOARD_STATUS.CURRENT}
-                                content="Platform Launch"
-                            />
-                            <BoardList
-                                status={BOARD_STATUS.INACTIVE}
-                                content="Marketing Plan"
-                            />
-                            <BoardList
-                                status={BOARD_STATUS.INACTIVE}
-                                content="Roadmap"
-                            />
+                            {displayBoardNames().map((boardName, index) => {
+                                return (
+                                    <BoardList
+                                        status={
+                                            currentBoardIndex === index
+                                                ? BOARD_STATUS.CURRENT
+                                                : BOARD_STATUS.INACTIVE
+                                        }
+                                        content={boardName}
+                                        onClick={() => selectBoard(index)}
+                                    />
+                                );
+                            })}
                         </ul>
                         <BoardList
                             status={BOARD_STATUS.CREATE}
                             isButton={true}
+                            onClick={() => {}}
                         />
                     </div>
 

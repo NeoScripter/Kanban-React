@@ -15,7 +15,7 @@ const headerColors = [
 ];
 
 export default function Dashboard() {
-    const { boards } = useBoardContext();
+    const { boards, currentBoardIndex } = useBoardContext();
     const isLarge = useScreenResize();
     const { showSidebar } = useSidebarContext();
 
@@ -26,7 +26,7 @@ export default function Dashboard() {
                 isLarge && showSidebar && 'sm:translate-x-65 md:translate-x-75'
             )}
         >
-            {boards[0].columns.map((column, idx) => (
+            {boards[currentBoardIndex].columns.map((column, idx) => (
                 <Column key={column.id} column={column} idx={idx} />
             ))}
         </div>
