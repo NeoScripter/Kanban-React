@@ -1,14 +1,16 @@
 import * as motion from 'motion/react-client';
 import { AnimatePresence } from 'motion/react';
 import { MotionProps } from "framer-motion";
+import { cc } from '../utils/cc';
 
 type AnimateWrapperProps = {
     children: React.ReactNode,
     isVisible: boolean,
-    options?: Partial<MotionProps>
+    options?: Partial<MotionProps>,
+    isAbove?: boolean
 }
 
-export function AnimateWrapper({ children, isVisible, options = {} }: AnimateWrapperProps) {
+export function AnimateWrapper({ children, isVisible, options = {}, isAbove = true }: AnimateWrapperProps) {
   const defaults = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
@@ -26,6 +28,7 @@ export function AnimateWrapper({ children, isVisible, options = {} }: AnimateWra
       <AnimatePresence initial={true}>
         {isVisible && (
           <motion.div
+          className={cc(isAbove && "relative z-10")}
           initial={merged.initial}
           animate={merged.animate}
           exit={merged.exit}

@@ -1,8 +1,6 @@
-import { Board, Column, Subtask, Task } from "../types/taskTypes";
-
+import { Board, Column, Subtask, Task } from '../types/taskTypes';
 
 type RawColumn = Omit<Column, 'tasks'>;
-
 
 type JsonObject = {
     boards: JsonBoard[];
@@ -26,6 +24,48 @@ type JsonSubtask = Omit<Subtask, 'id'>;
 
 export class DashboardHanlder {
 
+    // Task
+
+    addTask(
+        boards: Board[],
+        boardIndex: number,
+        columnIndex: number,
+        title: string,
+        description: string,
+        subtaskNames: string[],
+        status: Column['id']
+    ) {
+        const subtasks = subtaskNames.map((title) => this.createSubtask(title));
+
+        const newTask = this.createTask(title, description, status, subtasks);
+
+        const updatedColumns = boards[boardIndex].columns.map((column, index) =>
+            index === columnIndex
+                ? { ...column, tasks: [...column.tasks, newTask] }
+                : column
+        );
+
+        const updatedBoard = {
+            ...boards[boardIndex],
+            columns: updatedColumns
+        };
+
+        return [
+            ...boards.slice(0, boardIndex),
+            updatedBoard,
+            ...boards.slice(boardIndex + 1)
+        ];
+    }
+
+    // Columns
+
+    getColumnNames(boards: Board[], boardIndex: number) {
+        return boards[boardIndex].columns.map((column) => column.name);
+    }
+
+    /*  showTask(boards: Board[], boardIndex: number, columnIndex: number, taskIndex: number) {
+
+    } */
 
     // Boards
 
