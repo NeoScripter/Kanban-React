@@ -15,6 +15,13 @@ function App() {
     function hideSidebar() {
         setShowSidebar(false);
     }
+
+    const options = {
+        initial: { x: -60, y: -100, transition: { duration: 0, ease: 'easeOut' }},
+        animate: { x: 0, transition: { duration: 0.4, ease: 'easeOut' }},
+        exit: { x: -60, transition: { duration: 0.4, ease: 'easeOut' }}
+    };
+
     
     return (
         <div className="relative">
@@ -22,7 +29,7 @@ function App() {
 
             <Sidebar showSidebar={showSidebar} hideSidebar={hideSidebar} />
 
-            <AnimateWrapper isVisible={!showSidebar}>
+            <AnimateWrapper isVisible={!showSidebar} options={options}>
                 <ShowSidebarButton toggleSidebar={toggleSidebar} />
             </AnimateWrapper>
 

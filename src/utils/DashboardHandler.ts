@@ -1,32 +1,32 @@
-type Subtask = {
-    id: string;
-    title: string;
-    isCompleted: boolean;
-};
+import { Board, Column, Subtask, Task } from "../types/taskTypes";
 
-type Task = {
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    subtasks: Subtask[];
-};
-
-type Column = {
-    id: string;
-    name: string;
-    tasks: Task[];
-};
 
 type RawColumn = Omit<Column, 'tasks'>;
 
-type Board = {
-    id: string;
-    name: string;
-    columns: Column[];
+
+type JsonObject = {
+    boards: JsonBoard[];
 };
 
-class DashboardHanlder {
+type JsonBoard = {
+    name: string;
+    columns: JsonColumn[];
+};
+type JsonColumn = {
+    name: string;
+    tasks: JsonTask[];
+};
+type JsonTask = {
+    title: string;
+    description: string;
+    status: string;
+    subtasks: JsonSubtask[];
+};
+type JsonSubtask = Omit<Subtask, 'id'>;
+
+export class DashboardHanlder {
+
+
     // Boards
 
     updateBoard(
@@ -137,5 +137,31 @@ class DashboardHanlder {
         };
 
         return newSubtask;
+    }
+
+    createInitialBoard(initialData: JsonObject) {
+        return initialData.boards.map((board) =>
+            this.createBoard(
+                board.name,
+                board.columns.map((column) =>
+                    this.createColumn(
+                        column.name,
+                        column.tasks.map((task) =>
+                            this.createTask(
+                                task.title,
+                                task.description,
+                                task.status,
+                                task.subtasks.map((subtask) =>
+                                    this.createSubtask(
+                                        subtask.title,
+                                        subtask.isCompleted
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
     }
 }
