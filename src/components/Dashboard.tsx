@@ -4,6 +4,16 @@ import { cc } from '../utils/cc';
 import { useSidebarContext } from '../hooks/useSidebarContext';
 import { useBoardContext } from '../hooks/useBoardContext';
 
+const headerColors = [
+    '#49C4E5',
+    '#8471F2',
+    '#67E2AE',
+    '#EA5555',
+    '#b6a12c',
+    '#ca109c',
+    '#03b197'
+];
+
 export default function Dashboard() {
     const { boards } = useBoardContext();
     const isLarge = useScreenResize();
@@ -16,8 +26,8 @@ export default function Dashboard() {
                 isLarge && showSidebar && 'sm:translate-x-65 md:translate-x-75'
             )}
         >
-            {boards[0].columns.map((column) => (
-                <Column column={column} />
+            {boards[0].columns.map((column, idx) => (
+                <Column key={column.id} column={column} idx={idx} />
             ))}
         </div>
     );
@@ -25,15 +35,24 @@ export default function Dashboard() {
 
 type ColumnType = {
     column: Column;
+    idx: number;
 };
 
-function Column({ column }: ColumnType) {
+function Column({ column, idx }: ColumnType) {
     return (
         <div className="w-70">
-            <header className="mb-6">{column.name}</header>
+            <header className="mb-6 font-bold flex items-center gap-3 uppercase tracking-[0.2em] text-sm">
+                <span
+                    className="w-4 h-4 shrink-0 rounded-full"
+                    style={{
+                        backgroundColor: headerColors[idx % headerColors.length]
+                    }}
+                ></span>
+                {column.name} {`(${column.tasks.length})`}
+            </header>
             <div className="space-y-6">
                 {column.tasks.map((task) => (
-                    <Task task={task} />
+                    <Task key={task.id} task={task} />
                 ))}
             </div>
         </div>
@@ -50,7 +69,13 @@ function Task({ task }: TaskProps) {
             <p className="mb-2 font-bold text-dark-black theme-transition dark:text-white text-balance">
                 {task.title}
             </p>
-            <p className="text-xs">{task.subtasks.length} subtasks</p>
+            <p className="text-xs font-bold">
+                {task.subtasks.reduce(
+                    (acc, subtask) => (subtask.isCompleted ? acc + 1 : acc),
+                    0
+                )}{' '}
+                of {task.subtasks.length} subtasks
+            </p>
         </div>
     );
 }
