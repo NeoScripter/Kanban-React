@@ -196,8 +196,8 @@ export class DashboardHanlder {
         return [...boards, newBoard];
     }
 
-    deleteBoard(boards: Board[], id: string) {
-        return boards.filter((board) => board.id !== id);
+    deleteBoard(boards: Board[], index: number) {
+        return [...boards.slice(0, index), ...boards.slice(index + 1)];
     }
 
     displayBoardNames(boards: Board[]) {

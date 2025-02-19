@@ -7,10 +7,11 @@ type AnimateWrapperProps = {
     children: React.ReactNode,
     isVisible: boolean,
     options?: Partial<MotionProps>,
-    isAbove?: boolean
+    isAbove?: boolean,
+    classes?: string
 }
 
-export function AnimateWrapper({ children, isVisible, options = {}, isAbove = true }: AnimateWrapperProps) {
+export function AnimateWrapper({ children, isVisible, options = {}, isAbove = true, classes = '' }: AnimateWrapperProps) {
   const defaults = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
@@ -28,7 +29,7 @@ export function AnimateWrapper({ children, isVisible, options = {}, isAbove = tr
       <AnimatePresence initial={true}>
         {isVisible && (
           <motion.div
-          className={cc(isAbove && "relative z-10")}
+          className={cc(isAbove && "relative z-10", classes)}
           initial={merged.initial}
           animate={merged.animate}
           exit={merged.exit}

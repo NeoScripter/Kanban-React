@@ -26,7 +26,7 @@ export default function Dashboard() {
                 isLarge && showSidebar && 'sm:translate-x-65 md:translate-x-75'
             )}
         >
-            {boards[currentBoardIndex].columns.map((column, idx) => (
+            {boards.length > 0 && boards[currentBoardIndex].columns.map((column, idx) => (
                 <Column key={column.id} column={column} idx={idx} />
             ))}
         </div>

@@ -9,56 +9,93 @@ import { THEMES } from '../utils/theme';
 import { cc } from '../utils/cc';
 import { useSidebarContext } from '../hooks/useSidebarContext';
 import { useBoardContext } from '../hooks/useBoardContext';
-
+import { useState } from 'react';
+import { AnimateWrapper } from '../providers/AnimateWrapper';
+import { createPortal } from 'react-dom';
 
 export default function Header() {
     const { theme } = useThemeContext();
     const { showSidebar, toggleSidebar } = useSidebarContext();
-    const { getCurrentBoardName } = useBoardContext();
+    const { getCurrentBoardName, deleteBoard, currentBoardIndex } = useBoardContext();
+    const [showModal, setShowModal] = useState(false);
 
     const isDark = theme === THEMES.DARK;
 
+    function handleModalClick() {
+        deleteBoard(currentBoardIndex);
+        setShowModal(false);
+    }
+
     return (
         <header className="flex items-center bg-white dark:bg-dark-gray justify-between gap-2 shadow-sm border-b border-dark-white dark:border-light-gray theme-transition z-30">
-                <div className="flex items-center">
-                    <div className="p-5 sm:p-7 md:p-8 sm:border-r-1 sm:border-dark-white dark:sm:border-light-gray theme-transition">
-                        <img src={logoMobile} alt="" className="sm:hidden" />
-                        <img
-                            src={isDark ? logoLight : logoDark}
-                            alt=""
-                            className="hidden sm:block"
-                        />
-                    </div>
-                    <div className="py-5 sm:p-7 md:p-8">
-                        <button onClick={toggleSidebar} className="flex items-center gap-2 cursor-pointer sm:hidden">
-                            <span className="xs:text-lg font-bold text-dark-black dark:text-white">
-                                {getCurrentBoardName()}{' '}
-                            </span>
-                            <img src={chevronDown} alt="" className={cc('mt-1 hidden xs:block transition-transform duration-300', showSidebar && '-rotate-180')} />
-                        </button>
-                        <span className={cc('text-xl md:text-2xl hidden sm:block transition-transform duration-400 font-bold text-dark-black dark:text-white', showSidebar && 'translate-x-[3rem] md:translate-x-[5rem]')}>
+            <div className="flex items-center">
+                <div className="p-5 sm:p-7 md:p-8 sm:border-r-1 sm:border-dark-white dark:sm:border-light-gray theme-transition">
+                    <img src={logoMobile} alt="" className="sm:hidden" />
+                    <img
+                        src={isDark ? logoLight : logoDark}
+                        alt=""
+                        className="hidden sm:block"
+                    />
+                </div>
+                <div className="py-5 sm:p-7 md:p-8">
+                    <button
+                        onClick={toggleSidebar}
+                        className="flex items-center gap-2 cursor-pointer sm:hidden"
+                    >
+                        <span className="xs:text-lg font-bold text-dark-black dark:text-white">
                             {getCurrentBoardName()}{' '}
                         </span>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-4 cursor-pointer p-5 sm:gap-6">
-                    <button
-                        className="flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6"
-                    >
-                        <img src={addTask} alt="" />
-                        <span className="text-white font-semibold hidden sm:inline">
-                            Add New Task
-                        </span>
-                    </button>
-                    <button className="cursor-pointer h-4 sm:h-5 shrink-0">
                         <img
-                            src={ellipsis}
-                            alt=""
-                            className="object-cover object-center h-full w-full"
+                            src={chevronDown}
+                            alt="arrow down"
+                            className={cc(
+                                'mt-1 hidden xs:block transition-transform duration-300',
+                                showSidebar && '-rotate-180'
+                            )}
                         />
                     </button>
+                    <span
+                        className={cc(
+                            'text-xl md:text-2xl hidden sm:block transition-transform duration-400 font-bold text-dark-black dark:text-white',
+                            showSidebar &&
+                                'translate-x-[3rem] md:translate-x-[5rem]'
+                        )}
+                    >
+                        {getCurrentBoardName()}{' '}
+                    </span>
                 </div>
-            </header>
-    )
+            </div>
+
+            <div className="flex items-center gap-4 cursor-pointer p-5 sm:gap-6 relative">
+                <button className="flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6">
+                    <img src={addTask} alt="" />
+                    <span className="text-white font-semibold hidden sm:inline">
+                        Add New Task
+                    </span>
+                </button>
+                <button
+                    onClick={() => setShowModal((o) => !o)}
+                    className="cursor-pointer h-4 sm:h-5 shrink-0 relative after:absolute after:w-10 after:h-12 after:-translate-1/2"
+                >
+                    <img
+                        src={ellipsis}
+                        alt="ellipsis"
+                        className="object-cover object-center h-full w-full"
+                    />
+                </button>
+            </div>
+            <AnimateWrapper
+                isVisible={showModal}
+                isAbove={false}
+                classes="absolute z-20 right-5 top-22"
+            >
+                <div className="shadow-md w-40 z-20 rounded-xl p-4 bg-white dark:bg-light-black">
+                    <button className="text-sm mb-4">Edit Board</button>
+                    <button onClick={handleModalClick} className="text-sm text-dark-red cursor-pointer">
+                        Delete Board
+                    </button>
+                </div>
+            </AnimateWrapper>
+        </header>
+    );
 }
