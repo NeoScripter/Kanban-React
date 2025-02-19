@@ -23,8 +23,86 @@ type JsonTask = {
 type JsonSubtask = Omit<Subtask, 'id'>;
 
 export class DashboardHanlder {
+    // Tasks
 
-    // Task
+    updateTask(
+        boards: Board[],
+        boardIndex: number,
+        columnIndex: number,
+        title: string,
+        description: string,
+        rawSubtasks: Subtask[],
+        taskIndex: number,
+        status: Column['id']
+    ) {
+        const currentTask =
+            boards[boardIndex].columns[columnIndex].tasks[taskIndex];
+        const rawSubtaskIds = new Set(rawSubtasks.map((subtask) => subtask.id));
+
+        const unchangedTasks = currentTask.subtasks.filter((subtask) =>
+            rawSubtaskIds.has(subtask.id)
+        );
+
+        const newSubtasks = rawSubtasks.filter(
+            (rawSubtask) =>
+                !unchangedTasks.some((subtask) => subtask.id === rawSubtask.id)
+        );
+
+        const subtasks = [...unchangedTasks, ...newSubtasks];
+
+        const updatedTask = this.createTask(
+            title,
+            description,
+            status,
+            subtasks
+        );
+
+        const updatedTasks = boards[boardIndex].columns[columnIndex].tasks.map(
+            (task, index) => (index === taskIndex ? updatedTask : task)
+        );
+
+        const updatedColumns = boards[boardIndex].columns.map((column, index) =>
+            index === columnIndex ? { ...column, tasks: updatedTasks } : column
+        );
+
+        const updatedBoard = {
+            ...boards[boardIndex],
+            columns: updatedColumns
+        };
+
+        return [
+            ...boards.slice(0, boardIndex),
+            updatedBoard,
+            ...boards.slice(boardIndex + 1)
+        ];
+    }
+
+    deleteTask(
+        boards: Board[],
+        boardIndex: number,
+        columnIndex: number,
+        taskId: Task['id']
+    ) {
+        const updatedColumns = boards[boardIndex].columns.map((column, index) =>
+            index === columnIndex
+                ? {
+                      ...column,
+                      tasks: column.tasks.filter((task) => task.id !== taskId)
+                  }
+                : column
+        );
+
+        const updatedBoard = {
+            ...boards[boardIndex],
+            columns: updatedColumns
+        };
+
+        return [
+            ...boards.slice(0, boardIndex),
+            updatedBoard,
+            ...boards.slice(boardIndex + 1)
+        ];
+    }
 
     addTask(
         boards: Board[],
