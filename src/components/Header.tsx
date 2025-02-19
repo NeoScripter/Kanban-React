@@ -34,7 +34,7 @@ export default function Header({ toggleSidebar, showSidebar }: HeaderProps) {
                             <span className="xs:text-lg font-bold text-dark-black dark:text-white">
                                 Platform Launch{' '}
                             </span>
-                            <img src={chevronDown} alt="" className="mt-1 hidden xs:block" />
+                            <img src={chevronDown} alt="" className={cc('mt-1 hidden xs:block transition-transform duration-300', showSidebar && '-rotate-180')} />
                         </button>
                         <span className={cc('text-xl md:text-2xl hidden sm:block transition-transform duration-400 font-bold text-dark-black dark:text-white', showSidebar && 'translate-x-[3rem] md:translate-x-[5rem]')}>
                             Platform Launch{' '}
