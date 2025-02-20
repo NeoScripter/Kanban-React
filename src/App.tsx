@@ -1,6 +1,6 @@
 import Header from './components/Header';
-import Sidebar from './components/Sidebar';
-import ShowSidebarButton from './components/ShowSidebarButton';
+import Sidebar from './components/sidebar/Sidebar';
+import ShowSidebarButton from './components/sidebar/ShowSidebarButton';
 import { AnimateWrapper } from './providers/AnimateWrapper';
 import Dashboard from './components/Dashboard';
 import { sidebarBtnAnimationOptions } from './consts/sidebarBtnAnimationOptions';

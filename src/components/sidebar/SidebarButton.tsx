@@ -1,6 +1,6 @@
 
-import { BOARD_STATUS } from '../consts/boardStatus';
-import { cc } from '../utils/cc';
+import { BOARD_STATUS } from '../../consts/boardStatus';
+import { cc } from '../../utils/cc';
 
 type SidebarButtonProps = {
     status: string;

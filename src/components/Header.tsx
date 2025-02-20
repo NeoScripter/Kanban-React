@@ -9,21 +9,30 @@ import { THEMES } from '../utils/theme';
 import { cc } from '../utils/cc';
 import { useSidebarContext } from '../hooks/useSidebarContext';
 import { useBoardContext } from '../hooks/useBoardContext';
-import { useState } from 'react';
-import { AnimateWrapper } from '../providers/AnimateWrapper';
-import { createPortal } from 'react-dom';
+import { useRef, useState } from 'react';
+import BoardModal from './modals/BoardModal';
+import useClickOutside from '../hooks/useClickOutside';
 
 export default function Header() {
+    const [showModal, setShowModal] = useState(false);
     const { theme } = useThemeContext();
     const { showSidebar, toggleSidebar } = useSidebarContext();
-    const { getCurrentBoardName, deleteBoard, currentBoardIndex } = useBoardContext();
-    const [showModal, setShowModal] = useState(false);
+    const { getCurrentBoardName, boardLength } = useBoardContext();
+    const modalRef = useRef<HTMLDivElement | null>(null);
+
+    useClickOutside(modalRef, () => {
+        if (showModal) closeModal();
+    });
 
     const isDark = theme === THEMES.DARK;
 
-    function handleModalClick() {
-        deleteBoard(currentBoardIndex);
+    function closeModal() {
         setShowModal(false);
+    }
+
+    function toggleModal() {
+        if (boardLength === 0) return
+        setShowModal((o) => !o);
     }
 
     return (
@@ -74,7 +83,10 @@ export default function Header() {
                     </span>
                 </button>
                 <button
-                    onClick={() => setShowModal((o) => !o)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        toggleModal();
+                    }}
                     className="cursor-pointer h-4 sm:h-5 shrink-0 relative after:absolute after:w-10 after:h-12 after:-translate-1/2"
                 >
                     <img
@@ -84,18 +96,8 @@ export default function Header() {
                     />
                 </button>
             </div>
-            <AnimateWrapper
-                isVisible={showModal}
-                isAbove={false}
-                classes="absolute z-20 right-5 top-22"
-            >
-                <div className="shadow-md w-40 z-20 rounded-xl p-4 bg-white dark:bg-light-black">
-                    <button className="text-sm mb-4">Edit Board</button>
-                    <button onClick={handleModalClick} className="text-sm text-dark-red cursor-pointer">
-                        Delete Board
-                    </button>
-                </div>
-            </AnimateWrapper>
+
+            <BoardModal ref={modalRef} showModal={showModal} closeModal={closeModal} />
         </header>
     );
 }

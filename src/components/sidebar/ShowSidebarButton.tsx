@@ -1,4 +1,4 @@
-import showSideBar from '../assets/svgs/icon-show-sidebar.svg';
+import showSideBar from '../../assets/svgs/icon-show-sidebar.svg';
 
 type ShowSidebarButtonProps = {
     toggleSidebar: () => void,

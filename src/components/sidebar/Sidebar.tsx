@@ -1,16 +1,16 @@
-import { useThemeContext } from '../hooks/useThemeContext';
-import { BOARD_STATUS } from '../consts/boardStatus';
+import { useThemeContext } from '../../hooks/useThemeContext';
+import { BOARD_STATUS } from '../../consts/boardStatus';
 import SidebarButton from './SidebarButton';
-import sun from '../assets/svgs/icon-light-theme.svg';
-import moon from '../assets/svgs/icon-dark-theme.svg';
-import { THEMES } from '../utils/theme';
-import logoDark from '../assets/svgs/logo-dark.svg';
-import logoLight from '../assets/svgs/logo-light.svg';
-import { AnimateWrapper } from '../providers/AnimateWrapper';
-import { useScreenResize } from '../hooks/useScreenResize';
-import { getSidebarAnimationOptions } from '../consts/sidebarAnimationOptions';
-import { useSidebarContext } from '../hooks/useSidebarContext';
-import { useBoardContext } from '../hooks/useBoardContext';
+import sun from '../../assets/svgs/icon-light-theme.svg';
+import moon from '../../assets/svgs/icon-dark-theme.svg';
+import { THEMES } from '../../utils/theme';
+import logoDark from '../../assets/svgs/logo-dark.svg';
+import logoLight from '../../assets/svgs/logo-light.svg';
+import { AnimateWrapper } from '../../providers/AnimateWrapper';
+import { useScreenResize } from '../../hooks/useScreenResize';
+import { getSidebarAnimationOptions } from '../../consts/sidebarAnimationOptions';
+import { useSidebarContext } from '../../hooks/useSidebarContext';
+import { useBoardContext } from '../../hooks/useBoardContext';
 
 export default function Sidebar() {
     const { theme, toggleTheme } = useThemeContext();
