@@ -5,17 +5,17 @@ import ModalOverlay from './ModalOverlay';
 import useClickOutside from '../../hooks/useClickOutside';
 import { DeleteModal } from './DeleteModal';
 
-type BoardModalProps = {
+type BoardDialogProps = {
     showModal: boolean;
     closeModal: () => void;
     ref: RefObject<HTMLDivElement | null>;
 };
 
-export default function BoardModal({
+export default function BoardDialog({
     ref,
     showModal,
     closeModal,
-}: BoardModalProps) {
+}: BoardDialogProps) {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const { deleteBoard, currentBoardIndex, getCurrentBoardName } = useBoardContext();
     const modalRef = useRef<HTMLDivElement | null>(null);

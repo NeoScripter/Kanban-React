@@ -10,7 +10,7 @@ import { cc } from '../utils/cc';
 import { useSidebarContext } from '../hooks/useSidebarContext';
 import { useBoardContext } from '../hooks/useBoardContext';
 import { useRef, useState } from 'react';
-import BoardModal from './modals/BoardModal';
+import BoardDialog from './modals/BoardDialog.tsx';
 import useClickOutside from '../hooks/useClickOutside';
 
 export default function Header() {
@@ -97,7 +97,7 @@ export default function Header() {
                 </button>
             </div>
 
-            <BoardModal ref={modalRef} showModal={showModal} closeModal={closeModal} />
+            <BoardDialog ref={modalRef} showModal={showModal} closeModal={closeModal} />
         </header>
     );
 }

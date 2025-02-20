@@ -6,7 +6,7 @@ type SidebarButtonProps = {
     status: string;
     content?: string;
     isButton?: boolean;
-    onClick: () => void;
+    onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 export default function SidebarButton({
     status,
