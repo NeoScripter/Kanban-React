@@ -11,6 +11,7 @@ type BoardContextType = {
     selectBoard: (arg0: number) => void,
     boardLength: number,
     deleteBoard: (arg0: number) => void,
+    addBoard: (arg0: string, arg1: string[]) => void,
 };
 
 const boardHandler = new DashboardHanlder();
@@ -36,11 +37,16 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
 
     function deleteBoard(index: number) {
         setBoards(prevBoards => boardHandler.deleteBoard(prevBoards, index));
+        setCurrentBoardIndex(0);
+    }
+
+    function addBoard(newBoardName: string, newBoardColumnNames: string[]) {
+        setBoards(prevBoards => boardHandler.addBoard(prevBoards, newBoardName, newBoardColumnNames));
     }
 
   
     return (
-        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard }}>
+        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard }}>
             {children}
         </BoardContext.Provider>
     );

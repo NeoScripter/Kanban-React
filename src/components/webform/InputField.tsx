@@ -13,7 +13,7 @@ export default function InputField({ label, setter, input }: InputFieldProps) {
         <div>
             <label
                 htmlFor={fieldId}
-                className="font-bold text-xs mb-2 block dark:text-white theme-transition"
+                className="font-bold text-xs sm:text-sm mb-2 block dark:text-white theme-transition"
             >
                 {label}
             </label>
@@ -22,7 +22,7 @@ export default function InputField({ label, setter, input }: InputFieldProps) {
                 id={fieldId}
                 value={input}
                 placeholder="e.g. Web Design"
-                className="border w-full border-gray-300 p-2 sm:px-3 text-sm rounded-md text-dark-black theme-transition dark:text-white"
+                className="border w-full border-gray-300 p-2 sm:p-3 text-sm sm:text-base rounded-md text-dark-black theme-transition dark:text-white"
                 onChange={(e) => setter(e.target.value)}
             />
         </div>

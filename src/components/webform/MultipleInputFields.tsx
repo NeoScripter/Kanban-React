@@ -30,7 +30,7 @@ export default function MultipleInputFields({ inputArray, setInputArray, label }
 
     return (
         <div>
-            <p className="font-bold text-xs mb-2 block dark:text-white theme-transition">
+            <p className="font-bold text-xs mb-2 sm:text-sm block dark:text-white theme-transition">
                 {label}
             </p>
             <div className="space-y-2 sm:space-y-4 mb-4">
@@ -46,8 +46,9 @@ export default function MultipleInputFields({ inputArray, setInputArray, label }
             </div>
 
             <button
+                type='button'
                 onClick={addColumn}
-                className="btn-secondary bg-light-blue text-sm hover:bg-light-violet/35 text-dark-violet"
+                className="btn-secondary bg-light-blue text-sm sm:text-base hover:bg-light-violet/35 text-dark-violet"
             >
                 + Add New Column
             </button>
@@ -72,7 +73,7 @@ function SingleField({
         <div className="flex items-center gap-1">
             <input
                 type="text"
-                className="border w-full border-gray-300 text-dark-black theme-transition dark:text-white p-2 sm:px-3 text-sm rounded-md"
+                className="border w-full border-gray-300 text-dark-black sm:text-base theme-transition dark:text-white p-2 sm:p-3 text-sm rounded-md"
                 value={input}
                 onChange={(e) => updateColumn(e, index)}
             />
@@ -81,8 +82,7 @@ function SingleField({
                 className="cursor-pointer h-full aspect-square p-2.5"
             >
                 <svg
-                    width="15"
-                    height="15"
+                    className='w-4 h-4 sm:w-5 sm:h-5'
                     viewBox="0 0 15 15"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"

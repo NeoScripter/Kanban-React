@@ -23,10 +23,14 @@ export default function Sidebar() {
     const { displayBoardNames, currentBoardIndex, selectBoard, boardLength } =
         useBoardContext();
     const [showBoardModal, setShowBoardModal] = useState(false);
-    const modalRef = useRef<HTMLDivElement | null>(null);
+    const modalRef = useRef<HTMLFormElement | null>(null);
+
+    function closeAddBoardModal() {
+        setShowBoardModal(false);
+    }
 
     useClickOutside(modalRef, () => {
-        if (showBoardModal) setShowBoardModal(false);
+        if (showBoardModal) closeAddBoardModal();
     });
 
     const isDark = THEMES.DARK === theme;
@@ -34,7 +38,7 @@ export default function Sidebar() {
     return (
         <>
             <ModalOverlay showModal={showBoardModal}>
-                <AddBoardModal ref={modalRef} />
+                <AddBoardModal ref={modalRef} closeAddBoardModal={closeAddBoardModal} />
             </ModalOverlay>
             <AnimateWrapper
                 isVisible={showSidebar}
