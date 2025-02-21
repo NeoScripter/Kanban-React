@@ -1,15 +1,20 @@
 import { ChangeEvent } from 'react';
+import type { RawColumn } from '../../utils/DashboardHandler';
 
 type MultipleInputFieldsProps = {
-    inputArray: string[],
-    setInputArray: React.Dispatch<React.SetStateAction<string[]>>,
+    inputArray: RawColumn[],
+    setInputArray: React.Dispatch<React.SetStateAction<RawColumn[]>>,
     label: string,
 }
 
 export default function MultipleInputFields({ inputArray, setInputArray, label }: MultipleInputFieldsProps) {
 
     function addColumn() {
-        setInputArray((a) => [...a, '']);
+        const newColumn = {
+            id: crypto.randomUUID(),
+            name: ''
+        }
+        setInputArray((a) => [...a, newColumn]);
     }
 
     function updateColumn(e: ChangeEvent, index: number) {
@@ -17,7 +22,9 @@ export default function MultipleInputFields({ inputArray, setInputArray, label }
         if (target == null) return;
 
         setInputArray((a) => {
-            return [...a.slice(0, index), target.value, ...a.slice(index + 1)];
+            const prevObj = a[index];
+            prevObj.name = target.value;
+            return [...a.slice(0, index), prevObj, ...a.slice(index + 1)];
         });
     }
 
@@ -38,7 +45,7 @@ export default function MultipleInputFields({ inputArray, setInputArray, label }
                     <SingleField
                         key={'multiple' + index}
                         index={index}
-                        input={input}
+                        input={input.name}
                         updateColumn={updateColumn}
                         deleteColumn={() => deleteColumn(index)}
                     />
@@ -46,7 +53,7 @@ export default function MultipleInputFields({ inputArray, setInputArray, label }
             </div>
 
             <button
-                type='button'
+                type="button"
                 onClick={addColumn}
                 className="btn-secondary bg-light-blue text-sm sm:text-base hover:bg-light-violet/35 text-dark-violet"
             >

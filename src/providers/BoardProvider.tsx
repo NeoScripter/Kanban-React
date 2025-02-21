@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
-import type { Board } from '../types/taskTypes';
-import { DashboardHanlder } from "../utils/DashboardHandler";
+import type { Board, Column } from '../types/taskTypes';
+import { DashboardHanlder, RawColumn } from "../utils/DashboardHandler";
 import data from '../utils/data.json';
 
 type BoardContextType = {
@@ -12,6 +12,8 @@ type BoardContextType = {
     boardLength: number,
     deleteBoard: (arg0: number) => void,
     addBoard: (arg0: string, arg1: string[]) => void,
+    updateBoard: (newBoardName: string, newBoardColumns: RawColumn[]) => void,
+    getCurrentBoardColumns: () => Column[]
 };
 
 const boardHandler = new DashboardHanlder();
@@ -44,9 +46,17 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
         setBoards(prevBoards => boardHandler.addBoard(prevBoards, newBoardName, newBoardColumnNames));
     }
 
+    function updateBoard(newBoardName: string, newBoardColumns: RawColumn[]) {
+        setBoards(prevBoards => boardHandler.updateBoard(prevBoards, currentBoardIndex, newBoardName, newBoardColumns));
+    }
+
+    function getCurrentBoardColumns() {
+        return boardHandler.getCurrentBoardColumns(boards, currentBoardIndex);
+    }
+
   
     return (
-        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard }}>
+        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard, updateBoard, getCurrentBoardColumns }}>
             {children}
         </BoardContext.Provider>
     );

@@ -65,8 +65,8 @@ type TaskProps = {
 
 function Task({ task }: TaskProps) {
     return (
-        <div className="bg-white dark:bg-dark-gray rounded-lg shadow-md px-4 py-6">
-            <p className="mb-2 font-bold text-dark-black theme-transition dark:text-white text-balance">
+        <div className="bg-white dark:bg-dark-gray rounded-lg shadow-md px-4 py-6 group cursor-pointer transition-transform hover:scale-102 duration-200">
+            <p className="mb-2 font-bold text-dark-black theme-transition dark:text-white text-balance group-hover:text-dark-violet transition-colors duration-200">
                 {task.title}
             </p>
             <p className="text-xs font-bold">

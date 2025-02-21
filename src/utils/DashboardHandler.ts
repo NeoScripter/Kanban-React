@@ -1,6 +1,6 @@
 import { Board, Column, Subtask, Task } from '../types/taskTypes';
 
-type RawColumn = Omit<Column, 'tasks'>;
+export type RawColumn = Omit<Column, 'tasks'>;
 
 type JsonObject = {
     boards: JsonBoard[];
@@ -139,6 +139,10 @@ export class DashboardHanlder {
 
     getColumnNames(boards: Board[], boardIndex: number) {
         return boards[boardIndex].columns.map((column) => column.name);
+    }
+
+    getCurrentBoardColumns(boards: Board[], boardIndex: number) {
+        return boards[boardIndex].columns;
     }
 
     /*  showTask(boards: Board[], boardIndex: number, columnIndex: number, taskIndex: number) {
