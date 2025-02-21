@@ -13,6 +13,11 @@ export default function AddBoardModal({ ref, closeAddBoardModal }: AddBoardModal
     const [boardName, setBoardName] = useState('');
     const [columnNames, setColumnNames] = useState<RawColumn[]>([]);
     const { addBoard } = useBoardContext();
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    function resetError() {
+        setIsSubmitted(false);
+    }
 
     function handleSumbit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -30,11 +35,15 @@ export default function AddBoardModal({ ref, closeAddBoardModal }: AddBoardModal
                 label="Board Name"
                 setter={setBoardName}
                 input={boardName}
+                isSubmitted={isSubmitted}
+                resetError={resetError}
             />
             <MultipleInputFields
                 inputArray={columnNames}
                 setInputArray={setColumnNames}
                 label='Board Columns'
+                isSubmitted={isSubmitted}
+                resetError={resetError}
             />
             <button className="btn-secondary bg-dark-violet sm:text-base text-white text-sm hover:bg-light-violet">
                 Create New Board

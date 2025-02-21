@@ -142,7 +142,7 @@ export class DashboardHanlder {
     }
 
     getCurrentBoardColumns(boards: Board[], boardIndex: number) {
-        return boards[boardIndex].columns;
+        return [...boards[boardIndex].columns];
     }
 
     /*  showTask(boards: Board[], boardIndex: number, columnIndex: number, taskIndex: number) {

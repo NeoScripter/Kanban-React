@@ -23,14 +23,9 @@ export default function BoardDialog({
     const { deleteBoard, currentBoardIndex, getCurrentBoardName } =
         useBoardContext();
     const deleteModalRef = useRef<HTMLDivElement | null>(null);
-    const editModalRef = useRef<HTMLFormElement | null>(null);
 
     useClickOutside(deleteModalRef, () => {
         if (showDeleteModal) setShowDeleteModal(false);
-    });
-
-    useClickOutside(editModalRef, () => {
-        if (showEditModal) setShowEditModal(false);
     });
 
     function handleDeleteModalClick() {
@@ -39,7 +34,7 @@ export default function BoardDialog({
         closeModal();
     }
 
-    function handleEditModalClick() {
+    function closeEditModal() {
         setShowEditModal(false);
     }
 
@@ -87,8 +82,8 @@ export default function BoardDialog({
 
             <ModalOverlay key="EditModalOverlay" showModal={showEditModal}>
                 <EditBoardModal
-                    closeEditBoardModal={handleEditModalClick}
-                    ref={editModalRef}
+                    closeEditBoardModal={closeEditModal}
+                    showEditModal={showEditModal}
                 />
             </ModalOverlay>
         </>
