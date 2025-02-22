@@ -14,6 +14,7 @@ import BoardDialog from './modals/BoardDialog.tsx';
 import useClickOutside from '../hooks/useClickOutside';
 import AddTaskModal from './modals/AddTaskModal.tsx';
 import ModalOverlay from './modals/ModalOverlay.tsx';
+import EllipsisBtn from './EllipsisBtn.tsx';
 
 export default function Header() {
     const [showModal, setShowModal] = useState(false);
@@ -44,7 +45,7 @@ export default function Header() {
 
     function openAddTaskModal() {
         if (boardLength === 0) return;
-        
+
         setShowAddTaskModal(true);
     }
 
@@ -88,26 +89,23 @@ export default function Header() {
                 </div>
             </div>
 
-            <div className="flex items-center gap-4 cursor-pointer p-5 sm:gap-6 relative">
-                <button disabled={boardLength === 0} onClick={openAddTaskModal} className="flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6">
+            <div className="flex items-center gap-4 cursor-pointer p-5 sm:pr-10 sm:gap-6 relative">
+                <button
+                    disabled={boardLength === 0}
+                    onClick={openAddTaskModal}
+                    className="flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6"
+                >
                     <img src={addTask} alt="Plus sign" />
                     <span className="text-white font-semibold hidden sm:inline">
                         Add New Task
                     </span>
                 </button>
-                <button
+                <EllipsisBtn
                     onClick={(e) => {
                         e.stopPropagation();
                         toggleModal();
                     }}
-                    className="cursor-pointer h-4 sm:h-5 shrink-0 relative after:absolute after:w-10 after:h-12 after:-translate-1/2"
-                >
-                    <img
-                        src={ellipsis}
-                        alt="ellipsis"
-                        className="object-cover object-center h-full w-full"
-                    />
-                </button>
+                />
             </div>
 
             <BoardDialog

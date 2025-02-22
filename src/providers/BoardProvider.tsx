@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import type { Board, Column } from '../types/taskTypes';
+import type { Board, Column, Task } from '../types/taskTypes';
 import { DashboardHanlder, RawColumn } from "../utils/DashboardHandler";
 import data from '../utils/data.json';
 
@@ -15,7 +15,17 @@ type BoardContextType = {
     updateBoard: (newBoardName: string, newBoardColumns: RawColumn[]) => void,
     getCurrentBoardColumns: () => Column[],
     addNewTask: (columnIndex: number, name: string, description: string, subtaskNames: string[]) => void,
+    currentTaskIndices: TaskIndices | null,
+    getCurrentTaskData: () => Task,
+    selectCurrentTask: (taskIndex: number, columnIndex: number) => void,
+    deselectCurrentTask: () => void,
+    changeSubtaskStatus: (subtaskIndex: number) => void,
 };
+
+type TaskIndices = {
+    taskIndex: number,
+    columnIndex: number,
+}
 
 const boardHandler = new DashboardHanlder();
 
@@ -24,6 +34,33 @@ export const BoardContext = createContext<BoardContextType | null>(null);
 export function BoardProvider({ children }: { children: React.ReactNode }) {
     const [boards, setBoards] = useState<Board[]>(boardHandler.createInitialBoard(data));
     const [currentBoardIndex, setCurrentBoardIndex] = useState<number>(0);
+    const [currentTaskIndices, setCurrentTaskIndices] = useState<TaskIndices | null>(null);
+
+    function changeSubtaskStatus(subtaskIndex: number) {
+        if (currentTaskIndices == null) return;
+
+        setBoards(prevBoard => boardHandler.changeSubtaskStatus(prevBoard, currentBoardIndex, currentTaskIndices.columnIndex, currentTaskIndices.taskIndex, subtaskIndex));
+    }
+
+    function deselectCurrentTask() {
+        setCurrentTaskIndices(null);
+    }
+
+    function selectCurrentTask(taskIndex: number, columnIndex: number) {
+        setCurrentTaskIndices({ taskIndex, columnIndex })
+    }
+
+    function getCurrentTaskData() {
+        const emptyTask: Task = {
+            id: '',
+            title: '',
+            description: '',
+            status: '',
+            subtasks: []
+        }
+        if (currentTaskIndices == null) return emptyTask;
+        return boardHandler.getTaskData(boards, currentBoardIndex, currentTaskIndices.columnIndex, currentTaskIndices.taskIndex);
+    }
 
     function getCurrentBoardName() {
         if (boards.length === 0) return '';
@@ -61,7 +98,7 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
 
   
     return (
-        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard, updateBoard, getCurrentBoardColumns, addNewTask }}>
+        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard, updateBoard, getCurrentBoardColumns, addNewTask, currentTaskIndices, getCurrentTaskData, selectCurrentTask, deselectCurrentTask, changeSubtaskStatus }}>
             {children}
         </BoardContext.Provider>
     );

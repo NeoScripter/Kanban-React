@@ -36,7 +36,7 @@ export default function EditBoardModal({ closeEditBoardModal }: EditBoardModalPr
     }
 
     return (
-        <form onSubmit={(e) => handleSumbit(e)} className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-86 theme-transition sm:w-120">
+        <form onSubmit={(e) => handleSumbit(e)} className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 theme-transition max-w-86 w-full sm:max-w-120">
             <p className="font-bold text-lg sm:text-xl text-dark-black dark:text-white theme-transition">
                 Edit Board
             </p>

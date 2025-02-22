@@ -18,8 +18,8 @@ export function SelectMenu({ items, selected, setSelected }: SelectMenuProps) {
         <div className="relative w-full">
             <Listbox value={selected} onChange={setSelected}>
                 {({ open }) => (
-                    <>
-                        <Listbox.Button className={cc("w-full cursor-pointer flex items-center justify-between border p-2 sm:p-3 text-sm sm:text-base rounded-md text-dark-black dark:text-white bg-white dark:bg-gray-800", open ? "border-dark-violet" : "border-gray-300")}>
+                    <div>
+                        <Listbox.Button className={cc("w-full cursor-pointer flex items-center justify-between border p-2 sm:p-3 text-sm sm:text-base rounded-md text-dark-black dark:text-white bg-white dark:bg-dark-gray", open ? "border-dark-violet" : "border-gray-300")}>
                             {selected.columnName}
                             <img
                                 src={chevronDown}
@@ -28,7 +28,7 @@ export function SelectMenu({ items, selected, setSelected }: SelectMenuProps) {
                             />
                         </Listbox.Button>
 
-                        <Listbox.Options className="absolute mt-2 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-lg rounded-md z-20">
+                        <Listbox.Options className="absolute mt-2 w-full bg-white dark:bg-dark-gray border border-gray-300 dark:border-gray-700 shadow-lg rounded-md z-20">
                             {items.map((item) => (
                                 <Listbox.Option
                                     key={item.id}
@@ -41,7 +41,7 @@ export function SelectMenu({ items, selected, setSelected }: SelectMenuProps) {
                                 </Listbox.Option>
                             ))}
                         </Listbox.Options>
-                    </>
+                    </div>
                 )}
             </Listbox>
         </div>
