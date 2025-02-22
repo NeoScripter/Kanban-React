@@ -40,7 +40,7 @@ type ColumnType = {
 
 function Column({ column, idx }: ColumnType) {
     return (
-        <div className="w-70">
+        <div className="w-70 column-animation" style={{ "--index": idx + 1 } as React.CSSProperties} >
             <header className="mb-6 font-bold flex items-center gap-3 uppercase tracking-[0.2em] text-sm">
                 <span
                     className="w-4 h-4 shrink-0 rounded-full"
@@ -51,8 +51,8 @@ function Column({ column, idx }: ColumnType) {
                 {column.name} {`(${column.tasks.length})`}
             </header>
             <div className="space-y-6">
-                {column.tasks.map((task) => (
-                    <Task key={task.id} task={task} />
+                {column.tasks.map((task, index) => (
+                    <Task key={task.id} task={task} index={index} />
                 ))}
             </div>
         </div>
@@ -61,11 +61,12 @@ function Column({ column, idx }: ColumnType) {
 
 type TaskProps = {
     task: Task;
+    index: number;
 };
 
-function Task({ task }: TaskProps) {
+function Task({ task, index }: TaskProps) {
     return (
-        <div className="bg-white dark:bg-dark-gray rounded-lg shadow-md px-4 py-6 group cursor-pointer transition-transform hover:scale-102 duration-200">
+        <div className="bg-white card-animation theme-transition dark:bg-dark-gray rounded-lg shadow-md px-4 py-6 group cursor-pointer" style={{ "--index": index + 1 } as React.CSSProperties}>
             <p className="mb-2 font-bold text-dark-black theme-transition dark:text-white text-balance group-hover:text-dark-violet transition-colors duration-200">
                 {task.title}
             </p>
