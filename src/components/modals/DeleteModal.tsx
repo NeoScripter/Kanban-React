@@ -15,7 +15,7 @@ export function DeleteModal({ isTask = false, cancelClick, deleteClick, name }: 
 
     return (
         <div
-            className="bg-white w-86 sm:w-120 max-w-full dark:bg-dark-gray rounded-lg p-6 sm:p-8"
+            className="bg-white w-86 pop-in sm:w-120 max-w-full dark:bg-dark-gray rounded-lg p-6 sm:p-8"
         >
             <p className="text-lg text-dark-red font-bold mb-6">{title}</p>
             <p className="text-sm mb-6">{body}</p>

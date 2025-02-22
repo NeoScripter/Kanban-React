@@ -78,6 +78,24 @@
     }
 }
 
+.pop-in {
+    animation: pop-in 500ms ease;
+}
+
+.pop-out {
+    animation: pop-in 500ms ease reverse;
+}
+
+
+@keyframes pop-in {
+    0% {
+        scale: 0;
+    }
+    100% {
+        scale: 1;
+    }
+}
+
 @keyframes pulse {
     0% {
         transform: scale(1);

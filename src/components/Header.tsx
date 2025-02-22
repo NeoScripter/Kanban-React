@@ -17,7 +17,7 @@ import ModalOverlay from './modals/ModalOverlay.tsx';
 
 export default function Header() {
     const [showModal, setShowModal] = useState(false);
-    const [showAddTaskModal, setShowAddTaskModal] = useState(true);
+    const [showAddTaskModal, setShowAddTaskModal] = useState(false);
     const { theme } = useThemeContext();
     const { showSidebar, toggleSidebar } = useSidebarContext();
     const { getCurrentBoardName, boardLength } = useBoardContext();

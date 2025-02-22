@@ -4,7 +4,7 @@ import MultipleInputFields from '../webform/MultipleInputFields';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { Subtask } from '../../types/taskTypes';
 import TextareaField from '../webform/TextareaField';
-import { SelectMenu } from '../webform/Select';
+import { SelectMenu } from '../webform/SelectMenu';
 
 type AddTaskModalProps = {
     closeAddTaskModal: () => void;
@@ -54,7 +54,7 @@ export default function AddTaskModal({ closeAddTaskModal }: AddTaskModalProps) {
     return (
         <form
             onSubmit={(e) => handleSumbit(e)}
-            className="bg-white dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-86 theme-transition sm:w-120"
+            className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-86 theme-transition sm:w-120"
         >
             <p className="font-bold text-lg sm:text-xl text-dark-black dark:text-white theme-transition">
                 Add New Task

@@ -1,5 +1,7 @@
 import { createPortal } from 'react-dom';
 import { AnimateWrapper } from '../../providers/AnimateWrapper';
+import { useState } from 'react';
+import { cc } from '../../utils/cc';
 
 type ModalOverlayProps = {
     children: React.ReactNode;
@@ -11,14 +13,22 @@ export default function ModalOverlay({
     showModal,
     closeModal
 }: ModalOverlayProps) {
+    const [isClosing, setIsClosing] = useState(false);
+
     return createPortal(
         <AnimateWrapper
             isVisible={showModal}
             isAbove={false}
             classes="fixed z-30 inset-0 bg-black/50 flex items-center justify-center"
-            onClick={closeModal}
+            onClick={() => {
+                setIsClosing(true);
+                setTimeout(() => {
+                    closeModal();
+                    setIsClosing(false);
+                }, 500);
+            }}
         >
-            <div onClick={(e) => e.stopPropagation()}>
+            <div onClick={(e) => e.stopPropagation()} className={cc(isClosing && 'pop-out scale-0')}>
             {children}
             </div>
         </AnimateWrapper>,
