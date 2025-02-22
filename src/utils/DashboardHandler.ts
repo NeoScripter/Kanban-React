@@ -23,7 +23,102 @@ type JsonTask = {
 type JsonSubtask = Omit<Subtask, 'id'>;
 
 export class DashboardHanlder {
+    // Subtasks
+
+    changeSubtaskStatus(
+        boards: Board[],
+        boardIndex: number,
+        columnIndex: number,
+        taskIndex: number,
+        subtaskIndex: number
+    ) {
+        const currentBoard = boards[boardIndex];
+        if (!currentBoard) return boards;
+    
+        const currentColumn = currentBoard.columns[columnIndex];
+        if (!currentColumn) return boards;
+    
+        const currentTask = currentColumn.tasks[taskIndex];
+        if (!currentTask) return boards;
+    
+        const currentSubtask = currentTask.subtasks[subtaskIndex];
+        if (!currentSubtask) return boards; 
+    
+        const updatedSubtasks = currentTask.subtasks.map((subtask, index) =>
+            index === subtaskIndex
+                ? { ...subtask, isCompleted: !subtask.isCompleted } 
+                : subtask
+        );
+    
+        const updatedTask = { ...currentTask, subtasks: updatedSubtasks };
+    
+        const updatedTasks = currentColumn.tasks.map((task, index) =>
+            index === taskIndex ? updatedTask : task
+        );
+    
+        const updatedColumns = currentBoard.columns.map((column, index) =>
+            index === columnIndex ? { ...column, tasks: updatedTasks } : column
+        );
+    
+        return [
+            ...boards.slice(0, boardIndex),
+            { ...currentBoard, columns: updatedColumns },
+            ...boards.slice(boardIndex + 1),
+        ];
+    }
+    
+
     // Tasks
+
+    changeTaskColumn(
+        boards: Board[],
+        boardIndex: number,
+        oldColumnIndex: number,
+        taskIndex: number,
+        newColumnIndex: number
+    ) {
+        const currentBoard = boards[boardIndex];
+        const oldColumn = currentBoard.columns[oldColumnIndex];
+        const newColumn = currentBoard.columns[newColumnIndex];
+
+        if (!oldColumn || !newColumn || !oldColumn.tasks[taskIndex]) {
+            console.warn('Invalid task move operation.');
+            return boards;
+        }
+
+        const currentTask = { ...oldColumn.tasks[taskIndex] };
+
+        const updatedOldColumnTasks = oldColumn.tasks.filter(
+            (_, index) => index !== taskIndex
+        );
+
+        const updatedNewColumnTasks = [...newColumn.tasks, currentTask];
+
+        const updatedColumns = currentBoard.columns.map((column, index) =>
+            index === oldColumnIndex
+                ? { ...column, tasks: updatedOldColumnTasks }
+                : index === newColumnIndex
+                  ? { ...column, tasks: updatedNewColumnTasks }
+                  : column
+        );
+
+        const updatedBoard = { ...currentBoard, columns: updatedColumns };
+
+        return [
+            ...boards.slice(0, boardIndex),
+            updatedBoard,
+            ...boards.slice(boardIndex + 1),
+        ];
+    }
+
+    getTaskData(
+        boards: Board[],
+        boardIndex: number,
+        columnIndex: number,
+        taskIndex: number
+    ) {
+        return boards[boardIndex].columns[columnIndex].tasks[taskIndex];
+    }
 
     updateTask(
         boards: Board[],
@@ -32,48 +127,55 @@ export class DashboardHanlder {
         title: string,
         description: string,
         rawSubtasks: Subtask[],
-        taskIndex: number,
-        status: Column['id']
+        taskIndex: number
     ) {
-        const currentTask =
-            boards[boardIndex].columns[columnIndex].tasks[taskIndex];
+        const currentBoard = boards[boardIndex];
+        if (!currentBoard) return boards;
+
+        const currentColumn = currentBoard.columns[columnIndex];
+        if (!currentColumn) return boards;
+
+        const currentTask = currentColumn.tasks[taskIndex];
+        if (!currentTask) return boards;
+
+        const updatedTask = {
+            ...currentTask,
+            subtasks: [...currentTask.subtasks],
+        };
+
+        const status = currentColumn.name;
+
         const rawSubtaskIds = new Set(rawSubtasks.map((subtask) => subtask.id));
 
-        const unchangedTasks = currentTask.subtasks.filter((subtask) =>
+        updatedTask.subtasks = updatedTask.subtasks.filter((subtask) =>
             rawSubtaskIds.has(subtask.id)
         );
 
         const newSubtasks = rawSubtasks.filter(
             (rawSubtask) =>
-                !unchangedTasks.some((subtask) => subtask.id === rawSubtask.id)
+                !updatedTask.subtasks.some(
+                    (subtask) => subtask.id === rawSubtask.id
+                )
         );
 
-        const subtasks = [...unchangedTasks, ...newSubtasks];
+        updatedTask.subtasks = [...updatedTask.subtasks, ...newSubtasks];
 
-        const updatedTask = this.createTask(
-            title,
-            description,
-            status,
-            subtasks
+        updatedTask.title = title;
+        updatedTask.description = description;
+        updatedTask.status = status;
+
+        const updatedTasks = currentColumn.tasks.map((task, index) =>
+            index === taskIndex ? updatedTask : task
         );
 
-        const updatedTasks = boards[boardIndex].columns[columnIndex].tasks.map(
-            (task, index) => (index === taskIndex ? updatedTask : task)
-        );
-
-        const updatedColumns = boards[boardIndex].columns.map((column, index) =>
+        const updatedColumns = currentBoard.columns.map((column, index) =>
             index === columnIndex ? { ...column, tasks: updatedTasks } : column
         );
 
-        const updatedBoard = {
-            ...boards[boardIndex],
-            columns: updatedColumns
-        };
-
         return [
             ...boards.slice(0, boardIndex),
-            updatedBoard,
-            ...boards.slice(boardIndex + 1)
+            { ...currentBoard, columns: updatedColumns },
+            ...boards.slice(boardIndex + 1),
         ];
     }
 
@@ -83,24 +185,27 @@ export class DashboardHanlder {
         columnIndex: number,
         taskId: Task['id']
     ) {
-        const updatedColumns = boards[boardIndex].columns.map((column, index) =>
-            index === columnIndex
-                ? {
-                      ...column,
-                      tasks: column.tasks.filter((task) => task.id !== taskId)
-                  }
-                : column
+        const updatedColumns = boards[boardIndex].columns.map(
+            (column, index) =>
+                index === columnIndex
+                    ? {
+                          ...column,
+                          tasks: column.tasks.filter(
+                              (task) => task.id !== taskId
+                          ),
+                      }
+                    : column
         );
 
         const updatedBoard = {
             ...boards[boardIndex],
-            columns: updatedColumns
+            columns: updatedColumns,
         };
 
         return [
             ...boards.slice(0, boardIndex),
             updatedBoard,
-            ...boards.slice(boardIndex + 1)
+            ...boards.slice(boardIndex + 1),
         ];
     }
 
@@ -110,28 +215,29 @@ export class DashboardHanlder {
         columnIndex: number,
         title: string,
         description: string,
-        subtaskNames: string[],
+        subtaskNames: string[]
     ) {
         const subtasks = subtaskNames.map((title) => this.createSubtask(title));
         const status = boards[boardIndex].columns[columnIndex].name;
 
         const newTask = this.createTask(title, description, status, subtasks);
 
-        const updatedColumns = boards[boardIndex].columns.map((column, index) =>
-            index === columnIndex
-                ? { ...column, tasks: [...column.tasks, newTask] }
-                : column
+        const updatedColumns = boards[boardIndex].columns.map(
+            (column, index) =>
+                index === columnIndex
+                    ? { ...column, tasks: [...column.tasks, newTask] }
+                    : column
         );
 
         const updatedBoard = {
             ...boards[boardIndex],
-            columns: updatedColumns
+            columns: updatedColumns,
         };
 
         return [
             ...boards.slice(0, boardIndex),
             updatedBoard,
-            ...boards.slice(boardIndex + 1)
+            ...boards.slice(boardIndex + 1),
         ];
     }
 
@@ -174,13 +280,13 @@ export class DashboardHanlder {
         const updatedBoard: Board = {
             ...currentBoard,
             name,
-            columns: [...unchangedColumns, ...newColumns]
+            columns: [...unchangedColumns, ...newColumns],
         };
 
         return [
             ...boards.slice(0, boardIndex),
             updatedBoard,
-            ...boards.slice(boardIndex + 1)
+            ...boards.slice(boardIndex + 1),
         ];
     }
 
@@ -218,7 +324,7 @@ export class DashboardHanlder {
         const newBoard: Board = {
             id: crypto.randomUUID(),
             name,
-            columns
+            columns,
         };
 
         return newBoard;
@@ -228,7 +334,7 @@ export class DashboardHanlder {
         const newColumn: Column = {
             id: crypto.randomUUID(),
             name,
-            tasks
+            tasks,
         };
 
         return newColumn;
@@ -245,7 +351,7 @@ export class DashboardHanlder {
             title,
             description,
             status,
-            subtasks
+            subtasks,
         };
 
         return newTask;
@@ -255,7 +361,7 @@ export class DashboardHanlder {
         const newSubtask: Subtask = {
             id: crypto.randomUUID(),
             title,
-            isCompleted
+            isCompleted,
         };
 
         return newSubtask;
