@@ -11,10 +11,9 @@ import { useScreenResize } from '../../hooks/useScreenResize';
 import { getSidebarAnimationOptions } from '../../consts/sidebarAnimationOptions';
 import { useSidebarContext } from '../../hooks/useSidebarContext';
 import { useBoardContext } from '../../hooks/useBoardContext';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import ModalOverlay from '../modals/ModalOverlay';
 import AddBoardModal from '../modals/AddBoardModal';
-import useClickOutside from '../../hooks/useClickOutside';
 
 export default function Sidebar() {
     const { theme, toggleTheme } = useThemeContext();
@@ -23,22 +22,17 @@ export default function Sidebar() {
     const { displayBoardNames, currentBoardIndex, selectBoard, boardLength } =
         useBoardContext();
     const [showBoardModal, setShowBoardModal] = useState(false);
-    const modalRef = useRef<HTMLFormElement | null>(null);
 
     function closeAddBoardModal() {
         setShowBoardModal(false);
     }
 
-    useClickOutside(modalRef, () => {
-        if (showBoardModal) closeAddBoardModal();
-    });
-
     const isDark = THEMES.DARK === theme;
 
     return (
         <>
-            <ModalOverlay showModal={showBoardModal}>
-                <AddBoardModal ref={modalRef} closeAddBoardModal={closeAddBoardModal} />
+            <ModalOverlay showModal={showBoardModal} closeModal={closeAddBoardModal}>
+                <AddBoardModal closeAddBoardModal={closeAddBoardModal} />
             </ModalOverlay>
             <AnimateWrapper
                 isVisible={showSidebar}

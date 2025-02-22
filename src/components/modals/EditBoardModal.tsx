@@ -1,28 +1,19 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import InputField from '../webform/InputField';
 import MultipleInputFields from '../webform/MultipleInputFields';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { RawColumn } from '../../utils/DashboardHandler';
-import useClickOutside from '../../hooks/useClickOutside';
 
 type EditBoardModalProps = {
-    showEditModal: boolean,
     closeEditBoardModal: () => void,
 }
 
-export default function EditBoardModal({ closeEditBoardModal, showEditModal }: EditBoardModalProps) {
+export default function EditBoardModal({ closeEditBoardModal }: EditBoardModalProps) {
     const { updateBoard, getCurrentBoardColumns, getCurrentBoardName } = useBoardContext();
     const [boardName, setBoardName] = useState(getCurrentBoardName());
     const [columnNames, setColumnNames] = useState<RawColumn[]>(getCurrentBoardColumns());
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const editModalRef = useRef<HTMLFormElement | null>(null);
 
-    useClickOutside(editModalRef, () => {
-        if (showEditModal) {
-            closeEditBoardModal();
-            
-        }
-    });
 
     function resetError() {
         setIsSubmitted(false);
@@ -45,12 +36,13 @@ export default function EditBoardModal({ closeEditBoardModal, showEditModal }: E
     }
 
     return (
-        <form ref={editModalRef} onSubmit={(e) => handleSumbit(e)} className="bg-white dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-86 theme-transition sm:w-120">
+        <form onSubmit={(e) => handleSumbit(e)} className="bg-white dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-86 theme-transition sm:w-120">
             <p className="font-bold text-lg sm:text-xl text-dark-black dark:text-white theme-transition">
                 Edit Board
             </p>
             <InputField
                 label="Board Name"
+                placeholder='e.g. Web Design'
                 setter={(setBoardName)}
                 input={boardName}
                 isSubmitted={isSubmitted}
@@ -60,8 +52,10 @@ export default function EditBoardModal({ closeEditBoardModal, showEditModal }: E
                 inputArray={columnNames}
                 setInputArray={setColumnNames}
                 label='Board Columns'
+                placeholders={["e.g. Todo", "e.g. Doing"]}
                 isSubmitted={isSubmitted}
                 resetError={resetError}
+                btnLabel="+ Add New Column"
             />
             <button className="btn-secondary bg-dark-violet sm:text-base text-white text-sm hover:bg-light-violet">
                 Update Board

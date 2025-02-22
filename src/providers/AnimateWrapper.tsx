@@ -8,10 +8,11 @@ type AnimateWrapperProps = {
     isVisible: boolean,
     options?: Partial<MotionProps>,
     isAbove?: boolean,
-    classes?: string
+    classes?: string,
+    onClick?: () => void,
 }
 
-export function AnimateWrapper({ children, isVisible, options = {}, isAbove = true, classes = '' }: AnimateWrapperProps) {
+export function AnimateWrapper({ children, isVisible, options = {}, isAbove = true, classes = '', onClick }: AnimateWrapperProps) {
   const defaults = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
@@ -34,6 +35,7 @@ export function AnimateWrapper({ children, isVisible, options = {}, isAbove = tr
           animate={merged.animate}
           exit={merged.exit}
           transition={merged.transition}
+          onClick={onClick}
           >
             {children}
           </motion.div>

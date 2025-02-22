@@ -34,6 +34,10 @@ export default function BoardDialog({
         closeModal();
     }
 
+    function closeDeleteModal() {
+        setShowDeleteModal(false);
+    }
+
     function closeEditModal() {
         setShowEditModal(false);
     }
@@ -71,19 +75,17 @@ export default function BoardDialog({
                 </div>
             </AnimateWrapper>
 
-            <ModalOverlay key="DeleteModalOverlay" showModal={showDeleteModal}>
+            <ModalOverlay key="DeleteBoardModalOverlay" showModal={showDeleteModal} closeModal={closeDeleteModal}>
                 <DeleteModal
                     cancelClick={() => setShowDeleteModal(false)}
                     deleteClick={handleDeleteModalClick}
                     name={getCurrentBoardName()}
-                    ref={deleteModalRef}
                 />
             </ModalOverlay>
 
-            <ModalOverlay key="EditModalOverlay" showModal={showEditModal}>
+            <ModalOverlay key="EditBoardModalOverlay" showModal={showEditModal} closeModal={closeEditModal}>
                 <EditBoardModal
                     closeEditBoardModal={closeEditModal}
-                    showEditModal={showEditModal}
                 />
             </ModalOverlay>
         </>

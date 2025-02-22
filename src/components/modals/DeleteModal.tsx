@@ -5,10 +5,9 @@ type DeleteModalProps = {
     cancelClick: () => void;
     deleteClick: () => void;
     name: string;
-    ref: React.RefObject<HTMLDivElement | null>;
 };
 
-export function DeleteModal({ isTask = false, cancelClick, deleteClick, name, ref }: DeleteModalProps) {
+export function DeleteModal({ isTask = false, cancelClick, deleteClick, name }: DeleteModalProps) {
     const title = isTask ? 'Delete this task?' : 'Delete this board?';
     const body = isTask
         ? `Are you sure you want to delete the ${name} task and its subtasks? This action cannot be reversed`
@@ -16,7 +15,6 @@ export function DeleteModal({ isTask = false, cancelClick, deleteClick, name, re
 
     return (
         <div
-            ref={ref}
             className="bg-white w-86 sm:w-120 max-w-full dark:bg-dark-gray rounded-lg p-6 sm:p-8"
         >
             <p className="text-lg text-dark-red font-bold mb-6">{title}</p>

@@ -2,30 +2,40 @@ import { ChangeEvent } from 'react';
 import type { RawColumn } from '../../utils/DashboardHandler';
 import { cc } from '../../utils/cc';
 import FormError from '../FormError';
+import { Subtask } from '../../types/taskTypes';
 
-type MultipleInputFieldsProps = {
-    inputArray: RawColumn[];
-    setInputArray: React.Dispatch<React.SetStateAction<RawColumn[]>>;
+type InputItem = RawColumn | Subtask;
+
+type MultipleInputFieldsProps<T extends InputItem> = {
+    inputArray: T[];
+    setInputArray: React.Dispatch<React.SetStateAction<T[]>>;
     label: string;
+    placeholders: string[];
     isSubmitted: boolean;
     resetError: () => void;
+    btnLabel: string;
 };
 
-export default function MultipleInputFields({
+export default function MultipleInputFields<T extends InputItem>({
     inputArray,
     setInputArray,
     label,
+    placeholders,
     isSubmitted,
     resetError,
-}: MultipleInputFieldsProps) {
+    btnLabel
+}: MultipleInputFieldsProps<T>) {
     function addColumn() {
         const newColumn = {
             id: crypto.randomUUID(),
-            name: '',
-        };
+            ...(inputArray.length > 0 && 'name' in inputArray[0] ? { name: '' } : { title: '', isCompleted: false })
+        } as T;
         setInputArray((a) => [...a, newColumn]);
     }
 
+    function isRawColumn(item: InputItem): item is RawColumn {
+        return (item as RawColumn).name !== undefined;
+    }
 
     function updateColumn(e: ChangeEvent<HTMLInputElement>, index: number) {
         const target = e.target as HTMLInputElement;
@@ -33,11 +43,16 @@ export default function MultipleInputFields({
 
         resetError();
 
-        setInputArray((a) => {
-            return a.map((column, i) =>
-                i === index ? { ...column, name: target.value } : column
-            );
-        });
+
+        setInputArray((a) =>
+            a.map((item, i) =>
+                i === index
+                    ? isRawColumn(item)
+                        ? { ...item, name: target.value } // ✅ Safe access
+                        : { ...item, title: target.value } // ✅ Safe access
+                    : item
+            )
+        );
     }
 
     function deleteColumn(index: number) {
@@ -53,9 +68,10 @@ export default function MultipleInputFields({
             <div className="space-y-2 sm:space-y-4 mb-4">
                 {inputArray.map((input, index) => (
                     <SingleField
-                        key={'multiple' + Math.random() * index}
+                        key={input.id}
                         index={index}
-                        input={input.name}
+                        input={'name' in input ? input.name : input.title}
+                        placeholder={placeholders[index] ?? ''}
                         updateColumn={updateColumn}
                         deleteColumn={() => deleteColumn(index)}
                         isSubmitted={isSubmitted}
@@ -71,7 +87,7 @@ export default function MultipleInputFields({
                 }}
                 className="btn-secondary bg-light-blue text-sm sm:text-base hover:bg-light-violet/35 text-dark-violet"
             >
-                + Add New Column
+                {btnLabel}
             </button>
         </div>
     );
@@ -80,6 +96,7 @@ export default function MultipleInputFields({
 type SingleFieldProps = {
     index: number;
     input: string;
+    placeholder: string;
     updateColumn: (e: ChangeEvent<HTMLInputElement>, index: number) => void;
     deleteColumn: () => void;
     isSubmitted: boolean;
@@ -88,6 +105,7 @@ type SingleFieldProps = {
 function SingleField({
     index,
     input,
+    placeholder,
     updateColumn,
     deleteColumn,
     isSubmitted,
@@ -102,6 +120,7 @@ function SingleField({
                     'border w-full text-dark-black sm:text-base theme-transition dark:text-white p-2 sm:p-3 text-sm rounded-md',
                     showError ? 'border-dark-red' : 'border-gray-300'
                 )}
+                placeholder={placeholder}
                 value={input}
                 onChange={(e) => updateColumn(e, index)}
             />
@@ -110,7 +129,11 @@ function SingleField({
                 <FormError classes="right-16" message="Can't be empty" />
             )}
             <button
-                onClick={deleteColumn}
+                type="button"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    deleteColumn();
+                }}
                 className="cursor-pointer h-full aspect-square p-2.5"
             >
                 <svg

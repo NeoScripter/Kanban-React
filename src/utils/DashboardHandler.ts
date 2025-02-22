@@ -111,9 +111,9 @@ export class DashboardHanlder {
         title: string,
         description: string,
         subtaskNames: string[],
-        status: Column['id']
     ) {
         const subtasks = subtaskNames.map((title) => this.createSubtask(title));
+        const status = boards[boardIndex].columns[columnIndex].name;
 
         const newTask = this.createTask(title, description, status, subtasks);
 

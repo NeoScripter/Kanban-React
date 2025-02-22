@@ -12,9 +12,12 @@ import { useBoardContext } from '../hooks/useBoardContext';
 import { useRef, useState } from 'react';
 import BoardDialog from './modals/BoardDialog.tsx';
 import useClickOutside from '../hooks/useClickOutside';
+import AddTaskModal from './modals/AddTaskModal.tsx';
+import ModalOverlay from './modals/ModalOverlay.tsx';
 
 export default function Header() {
     const [showModal, setShowModal] = useState(false);
+    const [showAddTaskModal, setShowAddTaskModal] = useState(true);
     const { theme } = useThemeContext();
     const { showSidebar, toggleSidebar } = useSidebarContext();
     const { getCurrentBoardName, boardLength } = useBoardContext();
@@ -31,8 +34,18 @@ export default function Header() {
     }
 
     function toggleModal() {
-        if (boardLength === 0) return
+        if (boardLength === 0) return;
         setShowModal((o) => !o);
+    }
+
+    function closeAddTaskModal() {
+        setShowAddTaskModal(false);
+    }
+
+    function openAddTaskModal() {
+        if (boardLength === 0) return;
+        
+        setShowAddTaskModal(true);
     }
 
     return (
@@ -76,8 +89,8 @@ export default function Header() {
             </div>
 
             <div className="flex items-center gap-4 cursor-pointer p-5 sm:gap-6 relative">
-                <button className="flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6">
-                    <img src={addTask} alt="" />
+                <button disabled={boardLength === 0} onClick={openAddTaskModal} className="flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6">
+                    <img src={addTask} alt="Plus sign" />
                     <span className="text-white font-semibold hidden sm:inline">
                         Add New Task
                     </span>
@@ -97,7 +110,19 @@ export default function Header() {
                 </button>
             </div>
 
-            <BoardDialog ref={modalRef} showModal={showModal} closeModal={closeModal} />
+            <BoardDialog
+                ref={modalRef}
+                showModal={showModal}
+                closeModal={closeModal}
+            />
+
+            <ModalOverlay
+                key="AddTaskModalOverlay"
+                showModal={showAddTaskModal}
+                closeModal={closeAddTaskModal}
+            >
+                <AddTaskModal closeAddTaskModal={closeAddTaskModal} />
+            </ModalOverlay>
         </header>
     );
 }

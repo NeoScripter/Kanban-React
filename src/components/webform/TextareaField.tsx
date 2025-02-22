@@ -1,27 +1,19 @@
 import { useId } from 'react';
-import { cc } from '../../utils/cc';
-import FormError from '../FormError';
 
-type InputFieldProps = {
+type TextareaFieldProps = {
     label: string;
     placeholder: string;
     setter: (value: string) => void;
     input: string;
-    isSubmitted: boolean;
-    resetError: () => void;
 };
 
-export default function InputField({
+export default function TextareaField({
     label,
     placeholder,
     setter,
     input,
-    isSubmitted,
-    resetError,
-}: InputFieldProps) {
+}: TextareaFieldProps) {
     const fieldId = useId();
-
-    const showError = isSubmitted && input === '';
 
     return (
         <div>
@@ -33,19 +25,14 @@ export default function InputField({
             </label>
 
             <div className="relative">
-                {showError && <FormError message="Can't be empty" classes='right-6' />}
-                <input
-                    type="text"
+                <textarea
+                rows={4}
                     id={fieldId}
                     value={input}
                     placeholder={placeholder}
-                    className={cc(
-                        'border w-full relative p-2 sm:p-3 text-sm sm:text-base rounded-md text-dark-black theme-transition dark:text-white',
-                        showError ? 'border-dark-red' : 'border-gray-300'
-                    )}
+                    className="border w-full relative p-2 sm:p-3 text-sm sm:text-base rounded-md text-dark-black theme-transition dark:text-white border-gray-300"
                     onChange={(e) => {
                         setter(e.target.value);
-                        resetError();
                     }}
                 />
             </div>

@@ -13,7 +13,8 @@ type BoardContextType = {
     deleteBoard: (arg0: number) => void,
     addBoard: (arg0: string, arg1: string[]) => void,
     updateBoard: (newBoardName: string, newBoardColumns: RawColumn[]) => void,
-    getCurrentBoardColumns: () => Column[]
+    getCurrentBoardColumns: () => Column[],
+    addNewTask: (columnIndex: number, name: string, description: string, subtaskNames: string[]) => void,
 };
 
 const boardHandler = new DashboardHanlder();
@@ -54,9 +55,13 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
         return boardHandler.getCurrentBoardColumns(boards, currentBoardIndex);
     }
 
+    function addNewTask(columnIndex: number, title: string, description: string, subtaskNames: string[]) {
+        setBoards(prevBoards => boardHandler.addTask(prevBoards, currentBoardIndex, columnIndex, title, description, subtaskNames))
+    }
+
   
     return (
-        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard, updateBoard, getCurrentBoardColumns }}>
+        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard, updateBoard, getCurrentBoardColumns, addNewTask }}>
             {children}
         </BoardContext.Provider>
     );
