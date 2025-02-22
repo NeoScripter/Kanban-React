@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { SelectMenu } from '../webform/SelectMenu';
 import EllipsisBtn from '../EllipsisBtn';
@@ -8,15 +8,22 @@ type ShowTaskModalProps = {
     closeShowTaskModal: () => void;
 };
 
+type SelectColumnType = {
+    id: string;
+    columnIndex: number;
+    columnName: string;
+};
+
 export default function ShowTaskModal({
     closeShowTaskModal,
 }: ShowTaskModalProps) {
-    const { getCurrentBoardColumns, getCurrentTaskData, currentTaskIndices } =
+    const { getCurrentBoardColumns, getCurrentTaskData, currentTaskIndices, changeTaskColumn, selectCurrentTask } =
         useBoardContext();
 
     const taskData = getCurrentTaskData();
 
-    const columns = getCurrentBoardColumns().map((column, index) => {
+    const initialColumns = getCurrentBoardColumns();
+    const columns = initialColumns.map((column, index) => {
         return {
             id: column.id,
             columnIndex: index,
@@ -28,12 +35,17 @@ export default function ShowTaskModal({
         columns[currentTaskIndices?.columnIndex || 0]
     );
 
+ /*    function handleChange(newColumn: SelectColumnType) {
+        changeTaskColumn(newColumn.columnIndex);
+        selectCurrentTask(initialColumns[newColumn.columnIndex].tasks.length - 1, newColumn.columnIndex)
+    }
+ */
     return (
-        <div className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 max-w-86 w-full theme-transition sm:max-w-120">
-            <p className="font-bold text-lg sm:text-xl text-dark-black dark:text-white theme-transition flex items-center justify-between gap-4 sm:gap-6">
+        <div className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-full xs:w-86 theme-transition sm:w-120">
+            <div className="font-bold text-lg sm:text-xl text-dark-black dark:text-white theme-transition flex items-center justify-between gap-4 sm:gap-6">
                 <div className="break-words text-balance">{taskData.title}</div>
                 <EllipsisBtn />
-            </p>
+            </div>
 
             {taskData.description && (
                 <p className="w-full relative text-sm sm:text-base text-dark-black theme-transition dark:text-white">

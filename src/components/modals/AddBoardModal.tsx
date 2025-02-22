@@ -30,7 +30,7 @@ export default function AddBoardModal({ closeAddBoardModal }: AddBoardModalProps
     }
 
     return (
-        <form onSubmit={(e) => handleSumbit(e)} className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 theme-transition  max-w-86 w-full sm:max-w-120">
+        <form onSubmit={(e) => handleSumbit(e)} className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 theme-transition w-full xs:w-86 sm:w-120">
             <p className="font-bold text-lg sm:text-xl text-dark-black dark:text-white theme-transition">
                 Add New Board
             </p>

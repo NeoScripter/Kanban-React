@@ -97,7 +97,7 @@ function Task({ task, taskIndex, columnIndex }: TaskProps) {
                 e.stopPropagation();
                 selectCurrentTask(taskIndex, columnIndex);
             }}
-            className="bg-white card-animation theme-transition dark:bg-dark-gray rounded-lg shadow-md px-4 py-6 group cursor-pointer"
+            className="bg-white z-10 card-animation theme-transition dark:bg-dark-gray rounded-lg shadow-md px-4 py-6 group cursor-pointer"
             style={{ '--index': taskIndex + 1 } as React.CSSProperties}
         >
             <p className="mb-2 font-bold text-dark-black theme-transition dark:text-white text-balance group-hover:text-dark-violet transition-colors duration-200">

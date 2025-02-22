@@ -37,10 +37,10 @@ export default function Sidebar() {
             <AnimateWrapper
                 isVisible={showSidebar}
                 options={getSidebarAnimationOptions(isLarge)}
-                isAbove={isLarge ? false : true}
+                isAbove={true}
                 classes="sm:h-full sm:absolute"
             >
-                <nav className="z-10 absolute min-h-screen h-full inset-0 bg-black/50 pt-8 sm:top-0 sm:fixed sm:w-65 md:w-75 sm:pt-0 sm:border-r sm:border-dark-white dark:border-light-gray theme-transition">
+                <nav className="z-30 absolute min-h-screen h-full inset-0 bg-black/50 pt-8 sm:top-0 sm:fixed sm:w-65 md:w-75 sm:pt-0 sm:border-r sm:border-dark-white dark:border-light-gray theme-transition">
                     <div className="bg-white dark:bg-dark-gray rounded-lg sm:rounded-none theme-transition mx-auto py-4 w-66 sm:w-full sm:h-full">
                         <div className="py-4 px-6 hidden sm:block mb-6">
                             <img

@@ -20,6 +20,7 @@ type BoardContextType = {
     selectCurrentTask: (taskIndex: number, columnIndex: number) => void,
     deselectCurrentTask: () => void,
     changeSubtaskStatus: (subtaskIndex: number) => void,
+    changeTaskColumn: (newColumnIndex: number) => void,
 };
 
 type TaskIndices = {
@@ -35,6 +36,12 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
     const [boards, setBoards] = useState<Board[]>(boardHandler.createInitialBoard(data));
     const [currentBoardIndex, setCurrentBoardIndex] = useState<number>(0);
     const [currentTaskIndices, setCurrentTaskIndices] = useState<TaskIndices | null>(null);
+
+    function changeTaskColumn(newColumnIndex: number) {
+        if (currentTaskIndices == null) return;
+
+        setBoards(prevBoard => boardHandler.changeTaskColumn(prevBoard, currentBoardIndex, currentTaskIndices.columnIndex, currentTaskIndices.taskIndex, newColumnIndex))
+    }
 
     function changeSubtaskStatus(subtaskIndex: number) {
         if (currentTaskIndices == null) return;
@@ -98,7 +105,7 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
 
   
     return (
-        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard, updateBoard, getCurrentBoardColumns, addNewTask, currentTaskIndices, getCurrentTaskData, selectCurrentTask, deselectCurrentTask, changeSubtaskStatus }}>
+        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard, updateBoard, getCurrentBoardColumns, addNewTask, currentTaskIndices, getCurrentTaskData, selectCurrentTask, deselectCurrentTask, changeSubtaskStatus, changeTaskColumn }}>
             {children}
         </BoardContext.Provider>
     );
