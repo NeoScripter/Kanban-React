@@ -5,6 +5,7 @@ import { useBoardContext } from '../../hooks/useBoardContext';
 import { Subtask } from '../../types/taskTypes';
 import TextareaField from '../webform/TextareaField';
 import { SelectMenu } from '../webform/SelectMenu';
+import { SelectColumnType } from './ShowTaskModal';
 
 type AddTaskModalProps = {
     closeAddTaskModal: () => void;
@@ -28,6 +29,10 @@ export default function AddTaskModal({ closeAddTaskModal }: AddTaskModalProps) {
     });
     
     const [selectedColumn, setSelectedColumn] = useState(columns[0]); 
+
+    function selectColumn(column: SelectColumnType) {
+        setSelectedColumn(column);
+    }
 
     function resetError() {
         setIsSubmitted(false);
@@ -83,7 +88,7 @@ export default function AddTaskModal({ closeAddTaskModal }: AddTaskModalProps) {
                 btnLabel="+ Add New Subtask"
             />
 
-            <SelectMenu items={columns} selected={selectedColumn} setSelected={setSelectedColumn} />
+            <SelectMenu items={columns} selected={selectedColumn} setSelected={selectColumn} />
             <button className="btn-secondary bg-dark-violet sm:text-base text-white text-sm hover:bg-light-violet">
                 Create Task
             </button>

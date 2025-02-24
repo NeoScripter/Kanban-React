@@ -4,18 +4,14 @@ import { SelectMenu } from '../webform/SelectMenu';
 import EllipsisBtn from '../EllipsisBtn';
 import SubtaskItem from '../SubtaskItem';
 
-/* type ShowTaskModalProps = {
-    closeShowTaskModal: () => void;
-}; */
-
-/* type SelectColumnType = {
+export type SelectColumnType = {
     id: string;
     columnIndex: number;
     columnName: string;
-}; */
+};
 
 export default function ShowTaskModal() {
-    const { getCurrentBoardColumns, getCurrentTaskData, currentTaskIndices} =
+    const { getCurrentBoardColumns, getCurrentTaskData, currentTaskIndices, changeTaskColumn, selectCurrentTask } =
         useBoardContext();
 
     const taskData = getCurrentTaskData();
@@ -33,11 +29,12 @@ export default function ShowTaskModal() {
         columns[currentTaskIndices?.columnIndex || 0]
     );
 
- /*    function handleChange(newColumn: SelectColumnType) {
-        changeTaskColumn(newColumn.columnIndex);
-        selectCurrentTask(initialColumns[newColumn.columnIndex].tasks.length - 1, newColumn.columnIndex)
+    function selectColumn(column: SelectColumnType) {
+        setSelectedColumn(column)
+        changeTaskColumn(column.columnIndex);
+        selectCurrentTask(initialColumns[column.columnIndex].tasks.length, column.columnIndex)
     }
- */
+    
     return (
         <div className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-full xs:w-86 theme-transition sm:w-120">
             <div className="font-bold text-lg sm:text-xl text-dark-black dark:text-white theme-transition flex items-center justify-between gap-4 sm:gap-6">
@@ -78,7 +75,7 @@ export default function ShowTaskModal() {
                 <SelectMenu
                     items={columns}
                     selected={selectedColumn}
-                    setSelected={setSelectedColumn}
+                    setSelected={selectColumn}
                 />
             </div>
         </div>

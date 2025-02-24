@@ -10,7 +10,7 @@ type SelectColumnType = {
 type SelectMenuProps = {
     items: SelectColumnType[];
     selected: SelectColumnType;
-    setSelected: React.Dispatch<React.SetStateAction<SelectColumnType>>;
+    setSelected: (column: SelectColumnType) => void;
 };
 
 export function SelectMenu({ items, selected, setSelected }: SelectMenuProps) {
