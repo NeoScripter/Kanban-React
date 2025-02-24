@@ -28,7 +28,6 @@
 
     --animate-pulse: pulse 400ms ease-in-out;
 
-
     @keyframes pulse {
         0% {
             transform: scale(1);
@@ -43,7 +42,15 @@
             transform: scale(1);
         }
     }
+}
 
+.scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
 }
 
 @media (not (prefers-reduced-motion: reduce)) {
@@ -54,10 +61,11 @@
         animation: cards calc(var(--index) * 150ms) ease-in-out;
     }
     .card-animation:hover {
-        animation: cards calc(var(--index) * 150ms) ease-in-out, pulse 400ms ease-in-out;
+        animation:
+            cards calc(var(--index) * 150ms) ease-in-out,
+            pulse 400ms ease-in-out;
     }
 }
-
 
 @keyframes columns {
     0% {
@@ -67,7 +75,6 @@
         transform: translateX(0%);
     }
 }
-
 
 @keyframes cards {
     0% {
@@ -85,7 +92,6 @@
 .pop-out {
     animation: pop-in 500ms ease reverse;
 }
-
 
 @keyframes pop-in {
     0% {

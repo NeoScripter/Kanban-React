@@ -24,7 +24,7 @@ function App() {
                     <ShowSidebarButton toggleSidebar={toggleSidebar} />
                 </AnimateWrapper>
 
-                <main className="overflow-x-auto min-h-screen">
+                <main className="overflow-x-auto min-h-screen scrollbar-hidden">
                     <Dashboard />
                 </main>
             </div>
