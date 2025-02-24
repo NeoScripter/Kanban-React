@@ -1,7 +1,6 @@
 import logoMobile from '../assets/svgs/logo-mobile.svg';
 import chevronDown from '../assets/svgs/icon-chevron-down.svg';
 import addTask from '../assets/svgs/icon-add-task-mobile.svg';
-import ellipsis from '../assets/svgs/icon-vertical-ellipsis.svg';
 import logoDark from '../assets/svgs/logo-dark.svg';
 import logoLight from '../assets/svgs/logo-light.svg';
 import { useThemeContext } from '../hooks/useThemeContext';

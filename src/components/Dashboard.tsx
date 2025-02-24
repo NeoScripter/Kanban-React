@@ -41,7 +41,7 @@ export default function Dashboard() {
                 showModal={currentTaskIndices != null}
                 closeModal={deselectCurrentTask}
             >
-                <ShowTaskModal closeShowTaskModal={deselectCurrentTask} />
+                <ShowTaskModal />
             </ModalOverlay>
         </>
     );

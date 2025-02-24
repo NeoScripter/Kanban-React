@@ -1,23 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { SelectMenu } from '../webform/SelectMenu';
 import EllipsisBtn from '../EllipsisBtn';
 import SubtaskItem from '../SubtaskItem';
 
-type ShowTaskModalProps = {
+/* type ShowTaskModalProps = {
     closeShowTaskModal: () => void;
-};
+}; */
 
-type SelectColumnType = {
+/* type SelectColumnType = {
     id: string;
     columnIndex: number;
     columnName: string;
-};
+}; */
 
-export default function ShowTaskModal({
-    closeShowTaskModal,
-}: ShowTaskModalProps) {
-    const { getCurrentBoardColumns, getCurrentTaskData, currentTaskIndices, changeTaskColumn, selectCurrentTask } =
+export default function ShowTaskModal() {
+    const { getCurrentBoardColumns, getCurrentTaskData, currentTaskIndices} =
         useBoardContext();
 
     const taskData = getCurrentTaskData();
