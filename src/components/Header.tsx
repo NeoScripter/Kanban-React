@@ -52,10 +52,10 @@ export default function Header() {
         <header className="flex items-center bg-white dark:bg-dark-gray justify-between gap-2 shadow-sm border-b border-dark-white dark:border-light-gray theme-transition z-30">
             <div className="flex items-center">
                 <div className="p-5 sm:p-7 md:p-8 sm:border-r-1 sm:border-dark-white dark:sm:border-light-gray theme-transition">
-                    <img src={logoMobile} alt="" className="sm:hidden" />
+                    <img src={logoMobile} alt="Kanban" className="sm:hidden" />
                     <img
                         src={isDark ? logoLight : logoDark}
-                        alt=""
+                        alt="Kanban"
                         className="hidden sm:block"
                     />
                 </div>

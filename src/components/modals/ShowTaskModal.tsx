@@ -3,6 +3,7 @@ import { useBoardContext } from '../../hooks/useBoardContext';
 import { SelectMenu } from '../webform/SelectMenu';
 import EllipsisBtn from '../EllipsisBtn';
 import SubtaskItem from '../SubtaskItem';
+import TaskDialog from './TaskDialog';
 
 export type SelectColumnType = {
     id: string;
@@ -11,8 +12,23 @@ export type SelectColumnType = {
 };
 
 export default function ShowTaskModal() {
-    const { getCurrentBoardColumns, getCurrentTaskData, currentTaskIndices, changeTaskColumn, selectCurrentTask } =
-        useBoardContext();
+    const [showModal, setShowModal] = useState(false);
+
+    function closeModal() {
+        setShowModal(false);
+    }
+
+    function openModal() {
+        setShowModal(true);
+    }
+
+    const {
+        getCurrentBoardColumns,
+        getCurrentTaskData,
+        currentTaskIndices,
+        changeTaskColumn,
+        selectCurrentTask,
+    } = useBoardContext();
 
     const taskData = getCurrentTaskData();
 
@@ -30,16 +46,29 @@ export default function ShowTaskModal() {
     );
 
     function selectColumn(column: SelectColumnType) {
-        setSelectedColumn(column)
+        setSelectedColumn(column);
         changeTaskColumn(column.columnIndex);
-        selectCurrentTask(initialColumns[column.columnIndex].tasks.length, column.columnIndex)
+        selectCurrentTask(
+            initialColumns[column.columnIndex].tasks.length,
+            column.columnIndex
+        );
     }
-    
+
     return (
-        <div className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-full xs:w-86 theme-transition sm:w-120">
-            <div className="font-bold text-lg sm:text-xl text-dark-black dark:text-white theme-transition flex items-center justify-between gap-4 sm:gap-6">
+        <div
+            onClick={closeModal}
+            className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-full xs:w-86 theme-transition sm:w-120"
+        >
+            <div className="font-bold relative text-lg sm:text-xl text-dark-black dark:text-white theme-transition flex items-center justify-between gap-4 sm:gap-6">
                 <div className="break-words text-balance">{taskData.title}</div>
-                <EllipsisBtn />
+                <EllipsisBtn
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        openModal();
+                    }}
+                />
+
+                <TaskDialog showModal={showModal} closeModal={closeModal} />
             </div>
 
             {taskData.description && (
