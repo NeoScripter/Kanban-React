@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import type { Board, Column, Task } from '../types/taskTypes';
+import type { Board, Column, Subtask, Task } from '../types/taskTypes';
 import { DashboardHanlder, RawColumn } from "../utils/DashboardHandler";
 import data from '../utils/data.json';
 
@@ -21,6 +21,8 @@ type BoardContextType = {
     deselectCurrentTask: () => void,
     changeSubtaskStatus: (subtaskIndex: number) => void,
     changeTaskColumn: (newColumnIndex: number) => void,
+    deleteCurrentTask: () => void,
+    updateCurrentTask: (newColumnIndex: number, title: string, description: string, subtasks: Subtask[]) => void,
 };
 
 type TaskIndices = {
@@ -36,6 +38,20 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
     const [boards, setBoards] = useState<Board[]>(boardHandler.createInitialBoard(data));
     const [currentBoardIndex, setCurrentBoardIndex] = useState<number>(0);
     const [currentTaskIndices, setCurrentTaskIndices] = useState<TaskIndices | null>(null);
+
+    function updateCurrentTask(newColumnIndex: number, title: string, description: string, subtasks: Subtask[]) {
+        if (currentTaskIndices == null) return;
+
+        setBoards(prevBoard => boardHandler.updateTask(prevBoard, currentBoardIndex, currentTaskIndices.columnIndex, newColumnIndex, title, description, subtasks, currentTaskIndices.taskIndex))
+        
+        deselectCurrentTask();
+    }
+
+    function deleteCurrentTask() {
+        if (currentTaskIndices == null) return;
+
+        setBoards(prevBoard => boardHandler.deleteTask(prevBoard, currentBoardIndex, currentTaskIndices.columnIndex, currentTaskIndices.taskIndex))
+    }
 
     function changeTaskColumn(newColumnIndex: number) {
         if (currentTaskIndices == null) return;
@@ -105,7 +121,7 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
 
   
     return (
-        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard, updateBoard, getCurrentBoardColumns, addNewTask, currentTaskIndices, getCurrentTaskData, selectCurrentTask, deselectCurrentTask, changeSubtaskStatus, changeTaskColumn }}>
+        <BoardContext.Provider value={{ boards, displayBoardNames, currentBoardIndex, getCurrentBoardName, selectBoard, boardLength: boards.length, deleteBoard, addBoard, updateBoard, getCurrentBoardColumns, addNewTask, currentTaskIndices, getCurrentTaskData, selectCurrentTask, deselectCurrentTask, changeSubtaskStatus, changeTaskColumn, deleteCurrentTask, updateCurrentTask }}>
             {children}
         </BoardContext.Provider>
     );

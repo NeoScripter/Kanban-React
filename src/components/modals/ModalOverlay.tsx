@@ -19,7 +19,7 @@ export default function ModalOverlay({
         <AnimateWrapper
             isVisible={showModal}
             isAbove={false}
-            classes="fixed z-30 inset-0 bg-black/50 flex items-center justify-center"
+            classes="fixed z-30 inset-0 bg-black/50 flex items-center justify-center overflow-y-auto"
             onClick={() => {
                 setIsClosing(true);
                 setTimeout(() => {

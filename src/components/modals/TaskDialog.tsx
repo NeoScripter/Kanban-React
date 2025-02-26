@@ -4,7 +4,7 @@ import { useBoardContext } from '../../hooks/useBoardContext';
 import ModalOverlay from './ModalOverlay';
 import useClickOutside from '../../hooks/useClickOutside';
 import { DeleteModal } from './DeleteModal';
-import EditBoardModal from './EditBoardModal';
+import EditTaskModal from './EditTaskModal';
 
 type TaskDialogProps = {
     showModal: boolean;
@@ -18,7 +18,7 @@ export default function TaskDialog({
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
 
-    const { deleteBoard, currentBoardIndex, getCurrentBoardName } =
+    const { deleteCurrentTask, getCurrentTaskData, deselectCurrentTask } =
         useBoardContext();
     const deleteModalRef = useRef<HTMLDivElement | null>(null);
 
@@ -27,7 +27,8 @@ export default function TaskDialog({
     });
 
     function handleDeleteModalClick() {
-        deleteBoard(currentBoardIndex);
+        deleteCurrentTask();
+        deselectCurrentTask();
         setShowDeleteModal(false);
         closeModal();
     }
@@ -75,15 +76,16 @@ export default function TaskDialog({
 
             <ModalOverlay key="DeleteBoardModalOverlay" showModal={showDeleteModal} closeModal={closeDeleteModal}>
                 <DeleteModal
+                    isTask={true}
                     cancelClick={() => setShowDeleteModal(false)}
                     deleteClick={handleDeleteModalClick}
-                    name={getCurrentBoardName()}
+                    name={getCurrentTaskData().title}
                 />
             </ModalOverlay>
 
             <ModalOverlay key="EditBoardModalOverlay" showModal={showEditModal} closeModal={closeEditModal}>
-                <EditBoardModal
-                    closeEditBoardModal={closeEditModal}
+                <EditTaskModal
+                    closeEditTaskModal={closeEditModal}
                 />
             </ModalOverlay>
         </>
