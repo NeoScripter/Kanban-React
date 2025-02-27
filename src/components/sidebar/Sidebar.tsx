@@ -48,7 +48,7 @@ export default function Sidebar() {
                                 alt="Kanban logo"
                             />
                         </div>
-                        <span className="px-6 block font-bold uppercase tracking-[0.2em] text-sm mb-5">
+                        <span className="px-6 block font-bold uppercase tracking-[0.2em] text-xs mb-5">
                             All boards ({boardLength})
                         </span>
 

@@ -120,7 +120,7 @@ function Column({ column, idx }: ColumnType) {
             className="w-70 column-animation"
             style={{ '--index': idx + 1 } as React.CSSProperties}
         >
-            <header className="mb-6 font-bold flex items-center gap-3 uppercase tracking-[0.2em] text-sm">
+            <header className="mb-6 font-bold flex items-center gap-3 uppercase tracking-[0.2em] text-xs">
                 <span
                     className="w-4 h-4 shrink-0 rounded-full"
                     style={{
