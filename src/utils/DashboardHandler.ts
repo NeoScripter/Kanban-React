@@ -273,32 +273,31 @@ export class DashboardHanlder {
         rawColumns: RawColumn[]
     ): Board[] {
         const currentBoard = boards[boardIndex];
-        const rawColumnIds = new Set(rawColumns.map((col) => col.id));
-
-        const unchangedColumns = currentBoard.columns.filter((col) =>
-            rawColumnIds.has(col.id)
-        );
-
+        if (!currentBoard) throw new Error("Board not found");
+    
+        const rawColumnMap = new Map(rawColumns.map(col => [col.id, col]));
+    
+        const updatedColumns = currentBoard.columns
+            .filter(col => rawColumnMap.has(col.id)) 
+            .map(col => ({ ...col, name: rawColumnMap.get(col.id)!.name })); 
+    
         const newColumns = rawColumns
-            .filter(
-                (rawCol) =>
-                    !unchangedColumns.some((col) => col.id === rawCol.id)
-            )
-            .map((rawCol) => this.createColumn(rawCol.name));
-
+            .filter(rawCol => !currentBoard.columns.some(col => col.id === rawCol.id))
+            .map(rawCol => this.createColumn(rawCol.name));
+    
         const updatedBoard: Board = {
             ...currentBoard,
-            name,
-            columns: [...unchangedColumns, ...newColumns],
+            name, 
+            columns: [...updatedColumns, ...newColumns],
         };
-
+    
         return [
             ...boards.slice(0, boardIndex),
             updatedBoard,
             ...boards.slice(boardIndex + 1),
         ];
     }
-
+    
     addBoard(
         boards: Board[],
         newBoardName: string,
