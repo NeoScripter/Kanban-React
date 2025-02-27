@@ -4,6 +4,7 @@ import { SelectMenu } from '../webform/SelectMenu';
 import EllipsisBtn from '../EllipsisBtn';
 import SubtaskItem from '../SubtaskItem';
 import TaskDialog from './TaskDialog';
+import { Subtask } from '../../types/taskTypes';
 
 export type SelectColumnType = {
     id: string;
@@ -12,14 +13,14 @@ export type SelectColumnType = {
 };
 
 export default function ShowTaskModal() {
-    const [showModal, setShowModal] = useState(false);
+    const [showDialog, setshowDialog] = useState(false);
 
-    function closeModal() {
-        setShowModal(false);
+    function closeDialog() {
+        setshowDialog(false);
     }
 
-    function openModal() {
-        setShowModal(true);
+    function openDialog() {
+        setshowDialog(true);
     }
 
     const {
@@ -56,20 +57,15 @@ export default function ShowTaskModal() {
 
     return (
         <div
-            onClick={closeModal}
+            onClick={closeDialog}
             className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-full xs:w-86 theme-transition sm:w-120"
         >
-            <div className="font-bold relative text-lg sm:text-xl text-dark-black dark:text-white theme-transition flex items-center justify-between gap-4 sm:gap-6">
-                <div className="break-words text-balance">{taskData.title}</div>
-                <EllipsisBtn
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        openModal();
-                    }}
-                />
-
-                <TaskDialog showModal={showModal} closeModal={closeModal} />
-            </div>
+            <Header
+                title={taskData.title}
+                openDialog={openDialog}
+                closeDialog={closeDialog}
+                showDialog={showDialog}
+            />
 
             {taskData.description && (
                 <p className="w-full relative text-sm sm:text-base text-dark-black theme-transition dark:text-white">
@@ -77,25 +73,7 @@ export default function ShowTaskModal() {
                 </p>
             )}
 
-            <div>
-                <p className="font-bold text-xs sm:text-sm mb-2 block dark:text-white theme-transition">
-                    Subtasks (
-                    {taskData.subtasks.reduce(
-                        (acc, subtask) => (subtask.isCompleted ? acc + 1 : acc),
-                        0
-                    )}{' '}
-                    of {taskData.subtasks.length})
-                </p>
-                <div className="grid gap-2">
-                    {taskData.subtasks.map((subtask, index) => (
-                        <SubtaskItem
-                            key={subtask.id}
-                            subtask={subtask}
-                            index={index}
-                        />
-                    ))}
-                </div>
-            </div>
+            <Subtasks subtasks={taskData.subtasks} />
 
             <div>
                 <p className="font-bold text-xs sm:text-sm mb-2 block dark:text-white theme-transition">
@@ -106,6 +84,62 @@ export default function ShowTaskModal() {
                     selected={selectedColumn}
                     setSelected={selectColumn}
                 />
+            </div>
+        </div>
+    );
+}
+
+type HeaderPropsType = {
+    title: string;
+    openDialog: () => void;
+    closeDialog: () => void;
+    showDialog: boolean;
+};
+
+function Header({
+    title,
+    openDialog,
+    closeDialog,
+    showDialog,
+}: HeaderPropsType) {
+    return (
+        <div className="font-bold relative text-lg sm:text-xl text-dark-black dark:text-white theme-transition flex items-center justify-between gap-4 sm:gap-6">
+            <div className="break-words text-balance">{title}</div>
+            <EllipsisBtn
+                onClick={(e) => {
+                    e.stopPropagation();
+                    openDialog();
+                }}
+            />
+
+            <TaskDialog showModal={showDialog} closeModal={closeDialog} />
+        </div>
+    );
+}
+
+type SubtasksPropsType = {
+    subtasks: Subtask[];
+};
+
+function Subtasks({ subtasks }: SubtasksPropsType) {
+    return (
+        <div>
+            <p className="font-bold text-xs sm:text-sm mb-2 block dark:text-white theme-transition">
+                Subtasks (
+                {subtasks.reduce(
+                    (acc, subtask) => (subtask.isCompleted ? acc + 1 : acc),
+                    0
+                )}{' '}
+                of {subtasks.length})
+            </p>
+            <div className="grid gap-2">
+                {subtasks.map((subtask, index) => (
+                    <SubtaskItem
+                        key={subtask.id}
+                        subtask={subtask}
+                        index={index}
+                    />
+                ))}
             </div>
         </div>
     );

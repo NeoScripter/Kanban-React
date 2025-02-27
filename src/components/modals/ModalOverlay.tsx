@@ -37,7 +37,7 @@ export default function ModalOverlay({
             isVisible={showModal}
             isAbove={false}
             classes="fixed z-30 inset-0 bg-black/50 flex items-center justify-center overflow-y-auto"
-            onClick={closeParentModal}
+            onClick={() => closeParentModal()}
         >
             <div
                 onClick={(e) => e.stopPropagation()}

@@ -11,20 +11,10 @@ import AddTaskModal from './components/modals/AddTaskModal';
 import EditBoardModal from './components/modals/EditBoardModal';
 import { DeleteModal } from './components/modals/DeleteModal';
 import { useBoardContext } from './hooks/useBoardContext';
+import EditTaskModal from './components/modals/EditTaskModal';
 
 function App() {
     const { showSidebar, toggleSidebar } = useSidebarContext();
-    const {
-        showAddTaskModal,
-        closeAddTaskModal,
-        showEditBoardModal,
-        closeEditBoardModal,
-        closeDeleteBoardModal,
-        handleDeleteBoardModalClick,
-        showDeleteBoardModal,
-    } = useModalContext();
-
-    const { getCurrentBoardName } = useBoardContext();
 
     return (
         <>
@@ -45,6 +35,32 @@ function App() {
                 </main>
             </div>
 
+            <AppModals />
+        </>
+    );
+}
+
+export default App;
+
+function AppModals() {
+    const {
+        showAddTaskModal,
+        closeAddTaskModal,
+        showEditBoardModal,
+        closeEditBoardModal,
+        closeDeleteBoardModal,
+        handleDeleteBoardModalClick,
+        showDeleteBoardModal,
+        closeDeleteTaskModal,
+        showDeleteTaskModal,
+        handleDeleteTaskModalClick,
+        closeEditTaskModal,
+        showEditTaskModal,
+    } = useModalContext();
+
+    const { getCurrentBoardName, getCurrentTaskData } = useBoardContext();
+    return (
+        <>
             <ModalOverlay
                 key="AddTaskModalOverlay"
                 showModal={showAddTaskModal}
@@ -71,8 +87,26 @@ function App() {
                     name={getCurrentBoardName()}
                 />
             </ModalOverlay>
+
+            <ModalOverlay
+                key="DeleteBoardModalOverlay"
+                showModal={showDeleteTaskModal}
+                closeModal={closeDeleteTaskModal}
+            >
+                <DeleteModal
+                    isTask={true}
+                    deleteClick={handleDeleteTaskModalClick}
+                    name={getCurrentTaskData().title}
+                />
+            </ModalOverlay>
+
+            <ModalOverlay
+                key="EditBoardModalOverlay"
+                showModal={showEditTaskModal}
+                closeModal={closeEditTaskModal}
+            >
+                <EditTaskModal closeEditTaskModal={closeEditTaskModal} />
+            </ModalOverlay>
         </>
     );
 }
-
-export default App;

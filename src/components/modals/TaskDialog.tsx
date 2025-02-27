@@ -1,45 +1,13 @@
-import { useRef, useState } from 'react';
 import { AnimateWrapper } from '../../providers/AnimateWrapper';
-import { useBoardContext } from '../../hooks/useBoardContext';
-import ModalOverlay from './ModalOverlay';
-import useClickOutside from '../../hooks/useClickOutside';
-import { DeleteModal } from './DeleteModal';
-import EditTaskModal from './EditTaskModal';
+import { useModalContext } from '../../hooks/useModalContext';
 
 type TaskDialogProps = {
     showModal: boolean;
     closeModal: () => void;
 };
 
-export default function TaskDialog({
-    showModal,
-    closeModal,
-}: TaskDialogProps) {
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
-
-    const { deleteCurrentTask, getCurrentTaskData, deselectCurrentTask } =
-        useBoardContext();
-    const deleteModalRef = useRef<HTMLDivElement | null>(null);
-
-    useClickOutside(deleteModalRef, () => {
-        if (showDeleteModal) setShowDeleteModal(false);
-    });
-
-    function handleDeleteModalClick() {
-        deleteCurrentTask();
-        deselectCurrentTask();
-        setShowDeleteModal(false);
-        closeModal();
-    }
-
-    function closeDeleteModal() {
-        setShowDeleteModal(false);
-    }
-
-    function closeEditModal() {
-        setShowEditModal(false);
-    }
+export default function TaskDialog({ showModal, closeModal }: TaskDialogProps) {
+    const { openDeleteTaskModal, openEditTaskModal } = useModalContext();
 
     return (
         <>
@@ -55,7 +23,7 @@ export default function TaskDialog({
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            setShowEditModal(true);
+                            openEditTaskModal();
                             closeModal();
                         }}
                         className="text-sm p-2 w-full text-start cursor-pointer text-dark-blue transition-colors duration-300 hover:bg-dark-blue/10 rounded-md dark:hover:bg-dark-blue/30"
@@ -65,7 +33,7 @@ export default function TaskDialog({
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            setShowDeleteModal(true);
+                            openDeleteTaskModal();
                         }}
                         className="text-dark-red text-sm p-2 w-full text-start cursor-pointer transition-colors duration-300 hover:bg-dark-blue/10 rounded-md dark:hover:bg-dark-blue/30"
                     >
@@ -73,21 +41,6 @@ export default function TaskDialog({
                     </button>
                 </div>
             </AnimateWrapper>
-
-            <ModalOverlay key="DeleteBoardModalOverlay" showModal={showDeleteModal} closeModal={closeDeleteModal}>
-                <DeleteModal
-                    isTask={true}
-                    cancelClick={() => setShowDeleteModal(false)}
-                    deleteClick={handleDeleteModalClick}
-                    name={getCurrentTaskData().title}
-                />
-            </ModalOverlay>
-
-            <ModalOverlay key="EditBoardModalOverlay" showModal={showEditModal} closeModal={closeEditModal}>
-                <EditTaskModal
-                    closeEditTaskModal={closeEditModal}
-                />
-            </ModalOverlay>
         </>
     );
 }
