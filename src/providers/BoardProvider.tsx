@@ -4,6 +4,7 @@ import { DashboardHanlder, RawColumn } from "../utils/DashboardHandler";
 import data from '../utils/data.json';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 type BoardContextType = {
     boards: Board[],
@@ -37,7 +38,7 @@ const boardHandler = new DashboardHanlder();
 export const BoardContext = createContext<BoardContextType | null>(null);
 
 export function BoardProvider({ children }: { children: React.ReactNode }) {
-    const [boards, setBoards] = useState<Board[]>(boardHandler.createInitialBoard(data));
+    const [boards, setBoards] = useLocalStorage("kanbanBoards", boardHandler.createInitialBoard(data));
     const [currentBoardIndex, setCurrentBoardIndex] = useState<number>(0);
     const [currentTaskIndices, setCurrentTaskIndices] = useState<TaskIndices | null>(null);
 
