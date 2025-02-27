@@ -1,50 +1,27 @@
-# React + TypeScript + Vite
+# Kanban task management app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+Convenient and handy web app for managing your tasks and workflow. It has a sleek design and eye-appealing animation effects. It uses local storage to store the task content in the browser memory.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Screenshot
 
-## Expanding the ESLint configuration
+![Website Screenshot](public/kanban-screen.webp)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Links
 
-- Configure the top-level `parserOptions` property like this:
+[Link to the app](https://kanban-react-delta.vercel.app/)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## My process
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Built with
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- Semantic HTML5 markup
+- TypeScript
+- Tailwind CSS
+- React
+- Mobile-first workflow
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Author
+
+- Website - [My web portfolio](https://bespokewebsites.pro/)
