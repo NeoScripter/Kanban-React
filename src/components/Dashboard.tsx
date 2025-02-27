@@ -5,6 +5,9 @@ import { useSidebarContext } from '../hooks/useSidebarContext';
 import { useBoardContext } from '../hooks/useBoardContext';
 import ModalOverlay from './modals/ModalOverlay';
 import ShowTaskModal from './modals/ShowTaskModal';
+import { useThemeContext } from '../hooks/useThemeContext';
+import { THEMES } from '../utils/theme';
+import { useModalContext } from '../hooks/useModalContext';
 
 const headerColors = [
     '#49C4E5',
@@ -17,25 +20,39 @@ const headerColors = [
 ];
 
 export default function Dashboard() {
-    const { boards, currentBoardIndex } = useBoardContext();
+    const { boards, currentBoardIndex, getCurrentBoardColumns, boardLength } = useBoardContext();
     const isLarge = useScreenResize();
     const { showSidebar } = useSidebarContext();
     const { currentTaskIndices, deselectCurrentTask } = useBoardContext();
+    const { openEditBoardModal } = useModalContext();
+
+    const isBoardEmpty = getCurrentBoardColumns().length === 0;
 
     return (
         <>
             <div
                 className={cc(
-                    'h-full grid grid-flow-col justify-start gap-6 p-6 transition-transform duration-500 ease-in-out',
-                    isLarge &&
-                        showSidebar &&
-                        'sm:translate-x-65 md:translate-x-75'
+                    'min-h-screen grid grid-flow-col gap-6 p-6 transition-transform duration-500 ease-in-out',
+                    isLarge && showSidebar && 'sm:ml-65 md:ml-75',
+                    isBoardEmpty ? 'place-content-center' : 'justify-start'
                 )}
             >
-                {boards.length > 0 &&
-                    boards[currentBoardIndex].columns.map((column, idx) => (
-                        <Column key={column.id} column={column} idx={idx} />
-                    ))}
+                {!isBoardEmpty ? (
+                    <>
+                        {boardLength > 0 && boards[currentBoardIndex].columns.map(
+                            (column, idx) => (
+                                <Column
+                                    key={column.id}
+                                    column={column}
+                                    idx={idx}
+                                />
+                            )
+                        )}
+                        <NewColumnBtn onClick={openEditBoardModal} />
+                    </>
+                ) : (
+                    <EmptyBoardMessage onClick={openEditBoardModal} />
+                )}
             </div>
             <ModalOverlay
                 showModal={currentTaskIndices != null}
@@ -44,6 +61,51 @@ export default function Dashboard() {
                 <ShowTaskModal />
             </ModalOverlay>
         </>
+    );
+}
+
+type EmptyBoardMessagePropTypes = {
+    onClick: () => void;
+};
+
+function EmptyBoardMessage({ onClick }: EmptyBoardMessagePropTypes) {
+    return (
+        <div className="flex items-center justify-center flex-col gap-6 mx-auto mb-17 sm:mb-25">
+            <p className="font-bold text-lg sm:text-xl md:text-2xl text-center text-balance">
+                This board is empty. Create a new column to get started.
+            </p>
+
+            <button
+                onClick={onClick}
+                className=" text-white font-semibold btn-primary py-4 px-6"
+            >
+                + Add New Column
+            </button>
+        </div>
+    );
+}
+
+type NewColumnBtnPropTypes = {
+    onClick: () => void;
+};
+
+function NewColumnBtn({ onClick }: NewColumnBtnPropTypes) {
+    const { theme } = useThemeContext();
+
+    const isDark = theme === THEMES.DARK;
+
+    return (
+        <button
+            onClick={onClick}
+            className={cc(
+                'h-full w-70 mt-11 theme-transition flex items-center justify-center font-semibold text-2xl cursor-pointer rounded-md',
+                isDark
+                    ? 'dark-gradient hover:bg-gray-700!'
+                    : 'light-gradient hover:bg-blue-100!'
+            )}
+        >
+            + New Column
+        </button>
     );
 }
 

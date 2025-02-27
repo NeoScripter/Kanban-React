@@ -2,6 +2,8 @@ import { createContext, useState } from "react";
 import type { Board, Column, Subtask, Task } from '../types/taskTypes';
 import { DashboardHanlder, RawColumn } from "../utils/DashboardHandler";
 import data from '../utils/data.json';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type BoardContextType = {
     boards: Board[],
@@ -39,18 +41,29 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
     const [currentBoardIndex, setCurrentBoardIndex] = useState<number>(0);
     const [currentTaskIndices, setCurrentTaskIndices] = useState<TaskIndices | null>(null);
 
+    const notify = (message: string) => {
+        toast(message, {
+            className: "bg-white! dark:bg-dark-gray! font-bold! border border-dark-white! dark:border-light-gray!",
+          });
+      };
+
+
     function updateCurrentTask(newColumnIndex: number, title: string, description: string, subtasks: Subtask[]) {
         if (currentTaskIndices == null) return;
 
         setBoards(prevBoard => boardHandler.updateTask(prevBoard, currentBoardIndex, currentTaskIndices.columnIndex, newColumnIndex, title, description, subtasks, currentTaskIndices.taskIndex))
         
         deselectCurrentTask();
+
+        notify('Task successfully updated!');
     }
 
     function deleteCurrentTask() {
         if (currentTaskIndices == null) return;
 
-        setBoards(prevBoard => boardHandler.deleteTask(prevBoard, currentBoardIndex, currentTaskIndices.columnIndex, currentTaskIndices.taskIndex))
+        setBoards(prevBoard => boardHandler.deleteTask(prevBoard, currentBoardIndex, currentTaskIndices.columnIndex, currentTaskIndices.taskIndex));
+
+        notify('Task successfully deleted!');
     }
 
     function changeTaskColumn(newColumnIndex: number) {
@@ -101,14 +114,21 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
     function deleteBoard(index: number) {
         setBoards(prevBoards => boardHandler.deleteBoard(prevBoards, index));
         setCurrentBoardIndex(0);
+
+        notify('Board successfully deleted!');
     }
 
     function addBoard(newBoardName: string, newBoardColumnNames: string[]) {
         setBoards(prevBoards => boardHandler.addBoard(prevBoards, newBoardName, newBoardColumnNames));
+
+        notify('Board successfully created!');
     }
+    
 
     function updateBoard(newBoardName: string, newBoardColumns: RawColumn[]) {
         setBoards(prevBoards => boardHandler.updateBoard(prevBoards, currentBoardIndex, newBoardName, newBoardColumns));
+
+        notify('Board successfully updated!');
     }
 
     function getCurrentBoardColumns() {
@@ -116,7 +136,9 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
     }
 
     function addNewTask(columnIndex: number, title: string, description: string, subtaskNames: string[]) {
-        setBoards(prevBoards => boardHandler.addTask(prevBoards, currentBoardIndex, columnIndex, title, description, subtaskNames))
+        setBoards(prevBoards => boardHandler.addTask(prevBoards, currentBoardIndex, columnIndex, title, description, subtaskNames));
+
+        notify('Task successfully created!');
     }
 
   

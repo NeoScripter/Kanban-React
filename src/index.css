@@ -26,6 +26,7 @@
     --color-dark-red: oklch(64.91% 0.1847 23.81);
     --color-light-red: oklch(78.66% 0.1239 20.23);
 
+
     --animate-pulse: pulse 400ms ease-in-out;
 
     @keyframes pulse {
@@ -43,6 +44,15 @@
         }
     }
 }
+
+.light-gradient {
+    background: linear-gradient(rgb(233, 239, 250), rgba(233, 239, 250, 0.5), rgba(233, 239, 250, 0));
+}
+
+.dark-gradient {
+    background: linear-gradient(rgba(121, 132, 147, 0.2), rgba(130, 143, 163, 0.1), rgba(130, 143, 163, 0));
+}
+
 
 .scrollbar-hidden {
     -ms-overflow-style: none;

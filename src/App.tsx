@@ -12,6 +12,8 @@ import EditBoardModal from './components/modals/EditBoardModal';
 import { DeleteModal } from './components/modals/DeleteModal';
 import { useBoardContext } from './hooks/useBoardContext';
 import EditTaskModal from './components/modals/EditTaskModal';
+import { ToastContainer } from 'react-toastify';
+import { useThemeContext } from './hooks/useThemeContext';
 
 function App() {
     const { showSidebar, toggleSidebar } = useSidebarContext();
@@ -58,6 +60,8 @@ function AppModals() {
         showEditTaskModal,
     } = useModalContext();
 
+    const { theme } = useThemeContext();
+
     const { getCurrentBoardName, getCurrentTaskData } = useBoardContext();
     return (
         <>
@@ -89,7 +93,7 @@ function AppModals() {
             </ModalOverlay>
 
             <ModalOverlay
-                key="DeleteBoardModalOverlay"
+                key="DeleteBoardTaskOverlay"
                 showModal={showDeleteTaskModal}
                 closeModal={closeDeleteTaskModal}
             >
@@ -101,12 +105,24 @@ function AppModals() {
             </ModalOverlay>
 
             <ModalOverlay
-                key="EditBoardModalOverlay"
+                key="EditTaskModalOverlay"
                 showModal={showEditTaskModal}
                 closeModal={closeEditTaskModal}
             >
                 <EditTaskModal closeEditTaskModal={closeEditTaskModal} />
             </ModalOverlay>
+
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={true}
+                newestOnTop={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme={theme}
+            />
         </>
     );
 }
