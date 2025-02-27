@@ -37,9 +37,9 @@ export default function Dashboard() {
                     isBoardEmpty ? 'place-content-center' : 'justify-start'
                 )}
             >
-                {!isBoardEmpty ? (
+                {boardLength > 0 && (!isBoardEmpty ? (
                     <>
-                        {boardLength > 0 && boards[currentBoardIndex].columns.map(
+                        {boards[currentBoardIndex].columns.map(
                             (column, idx) => (
                                 <Column
                                     key={column.id}
@@ -52,7 +52,7 @@ export default function Dashboard() {
                     </>
                 ) : (
                     <EmptyBoardMessage onClick={openEditBoardModal} />
-                )}
+                ))}
             </div>
             <ModalOverlay
                 showModal={currentTaskIndices != null}
