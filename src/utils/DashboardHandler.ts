@@ -255,6 +255,8 @@ export class DashboardHanlder {
     }
 
     getCurrentBoardColumns(boards: Board[], boardIndex: number) {
+        if (boards.length === 0) return [];
+        
         return [...boards[boardIndex].columns];
     }
 
