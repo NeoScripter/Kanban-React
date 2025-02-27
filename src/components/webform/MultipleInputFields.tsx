@@ -3,6 +3,7 @@ import type { RawColumn } from '../../utils/DashboardHandler';
 import { cc } from '../../utils/cc';
 import FormError from '../FormError';
 import { Subtask } from '../../types/taskTypes';
+import CrossSvg from './components/CrossSvg';
 
 type InputItem = RawColumn | Subtask;
 
@@ -23,12 +24,14 @@ export default function MultipleInputFields<T extends InputItem>({
     placeholders,
     isSubmitted,
     resetError,
-    btnLabel
+    btnLabel,
 }: MultipleInputFieldsProps<T>) {
     function addColumn() {
         const newColumn = {
             id: crypto.randomUUID(),
-            ...(inputArray.length > 0 && 'name' in inputArray[0] ? { name: '' } : { title: '', isCompleted: false })
+            ...(inputArray.length > 0 && 'name' in inputArray[0]
+                ? { name: '' }
+                : { title: '', isCompleted: false }),
         } as T;
         setInputArray((a) => [...a, newColumn]);
     }
@@ -43,13 +46,12 @@ export default function MultipleInputFields<T extends InputItem>({
 
         resetError();
 
-
         setInputArray((a) =>
             a.map((item, i) =>
                 i === index
                     ? isRawColumn(item)
-                        ? { ...item, name: target.value } // ✅ Safe access
-                        : { ...item, title: target.value } // ✅ Safe access
+                        ? { ...item, name: target.value }
+                        : { ...item, title: target.value }
                     : item
             )
         );
@@ -57,7 +59,6 @@ export default function MultipleInputFields<T extends InputItem>({
 
     function deleteColumn(index: number) {
         setInputArray((a) => a.filter((_, i) => i !== index));
-
     }
 
     return (
@@ -136,27 +137,7 @@ function SingleField({
                 }}
                 className="cursor-pointer h-full aspect-square p-2.5"
             >
-                <svg
-                    className="w-4 h-4 sm:w-5 sm:h-5"
-                    viewBox="0 0 15 15"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <rect
-                        x="12.7279"
-                        width="3"
-                        height="18"
-                        transform="rotate(45 12.7279 0)"
-                        fill={cc(showError ? '#EA5555' : '#828FA3')}
-                    />
-                    <rect
-                        y="2.12109"
-                        width="3"
-                        height="18"
-                        transform="rotate(-45 0 2.12109)"
-                        fill={cc(showError ? '#EA5555' : '#828FA3')}
-                    />
-                </svg>
+                <CrossSvg showError={showError} />
             </button>
         </div>
     );

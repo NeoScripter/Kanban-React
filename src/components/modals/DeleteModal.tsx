@@ -1,13 +1,15 @@
+import { useModalOverlayContext } from "../../hooks/useModalOverlayContext";
 
 
 type DeleteModalProps = {
     isTask?: boolean;
-    cancelClick: () => void;
     deleteClick: () => void;
     name: string;
 };
 
-export function DeleteModal({ isTask = false, cancelClick, deleteClick, name }: DeleteModalProps) {
+export function DeleteModal({ isTask = false, deleteClick, name }: DeleteModalProps) {
+    const { closeParentModal } = useModalOverlayContext();
+    
     const title = isTask ? 'Delete this task?' : 'Delete this board?';
     const body = isTask
         ? `Are you sure you want to delete the ${name} task and its subtasks? This action cannot be reversed`
@@ -21,12 +23,14 @@ export function DeleteModal({ isTask = false, cancelClick, deleteClick, name }: 
             <p className="text-sm mb-6">{body}</p>
             <div className="flex flex-col sm:flex-row gap-4">
                 <button
-                    onClick={deleteClick}
+                    onClick={() => {
+                        closeParentModal(deleteClick)
+                    }}
                     className="btn-secondary bg-dark-red hover:bg-light-red text-white"
                 >
                     Delete
                 </button>
-                <button onClick={cancelClick} className="btn-secondary bg-light-blue dark:hover:bg-dark-white hover:bg-light-violet/35 text-dark-violet">
+                <button onClick={() => closeParentModal()} className="btn-secondary bg-light-blue dark:hover:bg-dark-white hover:bg-light-violet/35 text-dark-violet">
                     Cancel
                 </button>
             </div>

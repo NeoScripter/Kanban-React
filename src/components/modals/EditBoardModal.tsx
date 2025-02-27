@@ -14,7 +14,6 @@ export default function EditBoardModal({ closeEditBoardModal }: EditBoardModalPr
     const [columnNames, setColumnNames] = useState<RawColumn[]>(getCurrentBoardColumns());
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-
     function resetError() {
         setIsSubmitted(false);
     }

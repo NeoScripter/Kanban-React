@@ -8,45 +8,17 @@ import { THEMES } from '../utils/theme';
 import { cc } from '../utils/cc';
 import { useSidebarContext } from '../hooks/useSidebarContext';
 import { useBoardContext } from '../hooks/useBoardContext';
-import { useRef, useState } from 'react';
 import BoardDialog from './modals/BoardDialog.tsx';
-import useClickOutside from '../hooks/useClickOutside';
-import AddTaskModal from './modals/AddTaskModal.tsx';
-import ModalOverlay from './modals/ModalOverlay.tsx';
 import EllipsisBtn from './EllipsisBtn.tsx';
+import { useModalContext } from '../hooks/useModalContext.tsx';
 
 export default function Header() {
-    const [showModal, setShowModal] = useState(false);
-    const [showAddTaskModal, setShowAddTaskModal] = useState(false);
     const { theme } = useThemeContext();
     const { showSidebar, toggleSidebar } = useSidebarContext();
     const { getCurrentBoardName, boardLength } = useBoardContext();
-    const modalRef = useRef<HTMLDivElement | null>(null);
-
-    useClickOutside(modalRef, () => {
-        if (showModal) closeModal();
-    });
+    const { openAddTaskModal, toggleBoardDialog, showBoardDialog, closeBoardDialog, boardDialogRef } = useModalContext();
 
     const isDark = theme === THEMES.DARK;
-
-    function closeModal() {
-        setShowModal(false);
-    }
-
-    function toggleModal() {
-        if (boardLength === 0) return;
-        setShowModal((o) => !o);
-    }
-
-    function closeAddTaskModal() {
-        setShowAddTaskModal(false);
-    }
-
-    function openAddTaskModal() {
-        if (boardLength === 0) return;
-
-        setShowAddTaskModal(true);
-    }
 
     return (
         <header className="flex items-center bg-white dark:bg-dark-gray justify-between gap-2 shadow-sm border-b border-dark-white dark:border-light-gray theme-transition z-30">
@@ -92,7 +64,7 @@ export default function Header() {
                 <button
                     disabled={boardLength === 0}
                     onClick={openAddTaskModal}
-                    className="flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6"
+                    className={cc("flex items-center shrink-0 justify-center gap-2 px-4 py-2 btn-primary sm:py-4 sm:px-6", boardLength === 0 && '!bg-light-violet !cursor-default')}
                 >
                     <img src={addTask} alt="Plus sign" />
                     <span className="text-white font-semibold hidden sm:inline">
@@ -102,24 +74,16 @@ export default function Header() {
                 <EllipsisBtn
                     onClick={(e) => {
                         e.stopPropagation();
-                        toggleModal();
+                        toggleBoardDialog();
                     }}
                 />
             </div>
 
             <BoardDialog
-                ref={modalRef}
-                showModal={showModal}
-                closeModal={closeModal}
+                ref={boardDialogRef}
+                showModal={showBoardDialog}
+                closeModal={closeBoardDialog}
             />
-
-            <ModalOverlay
-                key="AddTaskModalOverlay"
-                showModal={showAddTaskModal}
-                closeModal={closeAddTaskModal}
-            >
-                <AddTaskModal closeAddTaskModal={closeAddTaskModal} />
-            </ModalOverlay>
         </header>
     );
 }
