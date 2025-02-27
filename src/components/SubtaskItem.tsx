@@ -36,7 +36,7 @@ export default function SubtaskItem({ subtask, index }: SubtaskItemProps) {
                 </svg>
             </Checkbox>
 
-            <p className={cc("font-bold text-xs sm:text-sm block theme-transition", subtask.isCompleted ? "dark:text-white text-dark-black" : "line-through")}>{subtask.title}</p>
+            <p className={cc("font-bold text-xs sm:text-sm block theme-transition", !subtask.isCompleted ? "dark:text-white text-dark-black" : "line-through")}>{subtask.title}</p>
         </div>
     );
 }
