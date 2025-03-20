@@ -58,7 +58,7 @@ export default function ShowTaskModal() {
     return (
         <div
             onClick={closeDialog}
-            className="bg-white pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-full xs:w-86 theme-transition sm:w-120"
+            className="bg-white overflow-y-auto max-h-200 pop-in dark:bg-dark-gray rounded-lg p-6 sm:p-8 space-y-6 w-full xs:w-86 theme-transition sm:w-120"
         >
             <Header
                 title={taskData.title}
